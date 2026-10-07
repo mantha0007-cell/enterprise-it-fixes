@@ -12,7 +12,7 @@ tags: ['authentication', 'B2B collaboration', 'guest users', 'tenant ID', 'sign-
 errorCodes: ['AADSTS50020', '90072']
 eventIds: []
 logFiles: ['Microsoft Entra sign-in logs']
-symptoms: ['User account from identity provider does not exist in tenant', 'The account needs to be added as an external user in the tenant first']
+symptoms: ['An authenticated user cannot enter the directory that hosts the requested resource.', 'The identity in the browser session differs from the invited or intended account.']
 visibility: published
 
 sources:
@@ -28,10 +28,14 @@ sources:
 
 AADSTS50020 means Microsoft Entra ID could not match the identity presented by the user to an account that can access the resource tenant. First confirm which account and tenant the sign-in request actually used. If the user is meant to be an external guest, check that the guest exists in the resource tenant and that the invitation was redeemed by the expected identity. Do not invite the same person repeatedly or change app account types until you have checked the failed sign-in details.
 
+## Our diagnostic lens
+
+Follow the identity through this chain and stop at the first mismatch: **person choosing an account → identity provider → authority/tenant endpoint → resource tenant → tenant-local guest or member → application access rule**. A mismatch near the beginning calls for correcting the account or request target; a missing guest record matters only when the design expects guest access; an assignment gate is a separate check at the end. This order helps avoid duplicate invitations and unnecessary changes to app audience settings.
+
 
 ## Problem / symptoms
 
-A user can authenticate with an identity provider but is rejected when opening an application or resource in another Microsoft Entra tenant. The message may say that the account does not exist in the tenant and needs to be added as an external user. A related home-tenant sign-in record can show error 90072.
+A user can authenticate with an identity provider but is rejected when opening an application or resource in another Microsoft Entra tenant. The message may indicate that the resource directory has no matching external identity. A related home-tenant sign-in record can show error 90072; check the named identity and directory before sending another invitation.
 
 ## Exact error
 

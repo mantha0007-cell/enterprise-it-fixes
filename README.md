@@ -2,7 +2,7 @@
 
 An English-language library of practical enterprise IT troubleshooting guides. Search exact error codes, event IDs, log lines, products, and symptoms to find steps that may help with similar problems.
 
-Articles explain issue patterns in original wording and link to relevant vendor sources. They are intended as helpful guidelines: the actual cause and suitable change depend on the environment. They do not claim that Enterprise IT Fixes investigated a specific customer's incident or applied a fix in that environment.
+Articles explain issue patterns in original wording and link to relevant vendor sources. Each guide must add a diagnostic angle of its own, such as a decision path, a useful comparison, or a risk boundary; a plain paraphrase of a vendor article is not enough. The guides are intended as helpful guidelines: the actual cause and suitable change depend on the environment. They do not claim that Enterprise IT Fixes investigated a specific customer's incident or applied a fix in that environment.
 
 This repository currently publishes thirteen guides. The sample page is a non-indexed draft and is excluded from case routes, search, browsing, and the sitemap. Cloudflare Web Analytics is enabled for the Pages project. Google Analytics is prepared but remains inactive until a GA4 Measurement ID is configured; its tag is gated behind an explicit analytics choice. No advertising code or slots are active.
 
@@ -42,9 +42,10 @@ Advertising remains off. Apply for AdSense only when the site has enough distinc
 4. Present the issue as a troubleshooting pattern. Separate likely causes from confirmed facts; do not invent a customer, incident, root cause, command result, or successful fix.
 5. Explain what varies by version or environment. Phrase recommendations as steps to investigate or try when the source and context support them.
 6. Update dateModified when content changes.
-7. Complete PUBLISH-CHECKLIST.md and inspect the rendered page before publication.
+7. Run `pnpm check:originality`, resolve all reported overlaps, and manually compare every article with its sources.
+8. Complete PUBLISH-CHECKLIST.md and inspect the rendered page before publication.
 
-Do not copy vendor article text, screenshots, or diagrams. Write an independent explanation, link the source, and review the public page for accidental quotation or unsupported claims. This editorial approach reduces copying risk but is not a legal guarantee.
+Do not copy vendor article text, screenshots, or diagrams. Use source material to verify facts, then write the article's explanation and diagnostic model independently. Keep only short error identifiers, standard product names, commands, and exact log fragments needed to identify the issue; link to the original source instead of reproducing its explanatory prose. Compare the final article with every cited source and rewrite any unnecessary long matching phrase. If uncertain whether a passage is too close, remove it or replace it with a link. A phrase scan is only a screening aid, not a legal safe harbor; this editorial standard reduces risk but cannot guarantee legal clearance.
 
 ## Privacy review
 

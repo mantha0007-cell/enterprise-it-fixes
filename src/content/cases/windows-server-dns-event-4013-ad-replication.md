@@ -12,7 +12,7 @@ tags: ["windows-server", "dns", "active-directory", "replication"]
 errorCodes: []
 eventIds: ["4013"]
 logFiles: ["DNS Server event log", "Directory Service event log", "System event log"]
-symptoms: ["DNS Server logs Event ID 4013 after startup.", "AD-integrated DNS zones are delayed or unavailable while a domain controller starts."]
+symptoms: ["A domain controller records DNS Event 4013 during startup.", "AD-backed DNS answers remain unavailable or return only after a long startup delay."]
 visibility: published
 
 sources:
@@ -22,6 +22,10 @@ sources:
 ## Short answer
 
 DNS Server Event ID 4013 indicates that DNS startup is waiting for Active Directory Domain Services initial synchronization so AD-integrated zone data can be available. A brief event during domain-controller startup can be transient. If it persists or clients lose name resolution, investigate AD replication, DC discovery, and DNS dependencies before changing synchronization behavior.
+
+## Our diagnostic lens
+
+Read this event on a timeline. **One startup warning that clears** points to a different investigation from **repeated 4013 events with DNS still unavailable**. For a persistent delay, compare replication and name resolution from the affected controller to its partners; the event is the wait condition, not a diagnosis of which dependency failed. Keep at least one healthy DNS/domain-controller path available while investigating, and avoid changing initial-sync behavior to hide the wait.
 
 ## Symptoms
 

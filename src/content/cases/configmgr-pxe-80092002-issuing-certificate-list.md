@@ -12,7 +12,7 @@ tags: ["configuration-manager", "pxe", "certificate", "registry"]
 errorCodes: ["0x80092002"]
 eventIds: []
 logFiles: ["SMSPXE.log"]
-symptoms: ["PXE boot fails while the distribution point processes certificate information.", "SMSPXE.log reports that the certificate list cannot be encoded."]
+symptoms: ["PXE handling on a distribution point logs certificate-store or encoding errors.", "The log includes 0x80092002 during PXE policy processing."]
 visibility: published
 
 sources:
@@ -22,6 +22,10 @@ sources:
 ## Short answer
 
 Microsoft documents a Configuration Manager PXE failure where the `IssuingCertificateList` registry value is missing under `HKLM\SOFTWARE\Microsoft\SMS\Security`. The relevant `SMSPXE.log` certificate-encoding error includes `0x80092002`. Confirm that exact signature and compare the affected distribution point with its management point before applying the documented registry repair.
+
+## Our diagnostic lens
+
+Treat the management point as a reference only when it belongs to the same Configuration Manager site as the affected distribution point. The useful comparison is not “copy the key from a healthy server”; it is **same site → correct role → exact value → narrowly scoped transfer**. If that chain cannot be established, stop before importing registry data. This avoids turning a certificate-list symptom into a broader security-key overwrite.
 
 ## Symptoms and exact log signature
 
@@ -49,15 +53,9 @@ The value discussed by Microsoft is `IssuingCertificateList`. Do not publish or 
 In the documented scenario, the required `IssuingCertificateList` value is missing. Configuration Manager cannot encode the issuing-certificate list while processing PXE requests.
 
 ## Suggested troubleshooting steps
-If the value exists on the correct management point, export that value and import it to the affected distribution point, following Microsoft’s procedure. The documented command pattern is:
+If the value exists on the correct management point, follow Microsoft's linked procedure to transfer the specific value to the affected distribution point. Avoid copying an entire key when unrelated values may differ. If the value is missing from the management point too, the documented recovery uses site-specific database information; have an administrator follow the current Microsoft procedure rather than improvising SQL. The linked article contains the current export/import syntax and sequence; check it before acting.
 
-```cmd
-REG EXPORT "HKLM\SOFTWARE\Microsoft\SMS\Security" C:\SMS\Security.reg
-```
-
-Use the export/import process only after checking the exact value and ensuring the source is the management point for the same site. Review the exported file before importing; do not blindly replace the entire security key if unrelated values differ.
-
-If the value is also missing from the management point, Microsoft documents retrieving the value from the site database and adding it to the management point and distribution point. That database operation is site-specific and should be performed only by an administrator who understands the supported procedure in the linked article. Do not run improvised SQL updates.
+Do not run improvised SQL updates.
 
 ## How to check the result
 After the approved change, restart or refresh the relevant Configuration Manager components only as directed by the vendor procedure. Re-run a controlled PXE test and confirm `SMSPXE.log` no longer shows the certificate-encoding failure and the client proceeds through boot image selection.

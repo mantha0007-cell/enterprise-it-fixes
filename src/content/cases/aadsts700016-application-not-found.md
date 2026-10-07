@@ -12,7 +12,7 @@ tags: ['authentication', 'application ID', 'tenant ID', 'service principal', 'OA
 errorCodes: ['AADSTS700016']
 eventIds: []
 logFiles: ['Microsoft Entra sign-in logs']
-symptoms: ['Application with identifier was not found in the directory', 'The request may have been sent to the wrong tenant']
+symptoms: ['A token request names an app ID that the receiving directory cannot resolve.', 'The configured authority may target a different directory from the intended app.']
 visibility: published
 
 sources:
@@ -25,6 +25,10 @@ sources:
 ## Short answer
 
 AADSTS700016 means the application identifier in the request was not found in the directory that received it. First verify the Application (client) ID and the tenant/authority used by the app. Then confirm the app is registered in that tenant or, for a multitenant app, that the required enterprise application/service principal exists there. Grant consent only when the requested permissions and app are expected and approved.
+
+## Our diagnostic lens
+
+Read the request as a tuple: **client ID + authority/tenant + application audience**. Verify those three values against the intended deployment before checking consent. If they match but the app is multitenant, determine whether its tenant-local service principal has been provisioned through the publisher's approved flow. Consent changes permissions; it cannot repair a typo or a request sent to the wrong directory.
 
 Use the request details and application registration to narrow down which tenant or client ID is involved.
 

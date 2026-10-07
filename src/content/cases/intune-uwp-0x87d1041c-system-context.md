@@ -12,7 +12,7 @@ tags: ["intune", "uwp", "microsoft-store", "system-context"]
 errorCodes: ["0x87D1041C"]
 eventIds: []
 logFiles: ["Intune Management Extension logs", "Company Portal app status"]
-symptoms: ["Intune reports that the application was not detected after installation.", "The Store app is visible or launchable for a user despite a failed status."]
+symptoms: ["The app can appear for a signed-in user while Intune reports a detection failure.", "A Store UWP assignment uses a different install context from the app's existing registration."]
 visibility: published
 
 sources:
@@ -23,15 +23,19 @@ sources:
 
 For the documented Microsoft Store app scenario, error `0x87D1041C` can occur when an app is already installed for a user but Intune deploys it in System context. The reported failure can reflect the mismatch between user-scoped app state and System-context detection; it does not by itself prove that the app is absent or that installation failed.
 
+## Our diagnostic lens
+
+Separate **package installation**, **where Windows registered the package**, and **what Intune's detection/reporting can see**. Check those as three different facts. If the app launches for one profile, that confirms only that profile can use it; it does not prove the device-scoped deployment completed. Compare the assignment intent with the package's supported context before changing detection rules or removing an existing app.
+
 ## Symptoms
 
-- Intune reports that the application was not detected after installation.
+- Intune's post-install check reports a detection failure.
 - The app appears available to a signed-in user.
 - The deployment uses System install behavior for a Microsoft Store (new) app.
 
 ## Exact error
 
-`0x87D1041C` — the application was not detected after installation completed.
+`0x87D1041C` — Intune's post-install detection step did not find the app in its expected scope.
 
 Use the full app installation status and associated management logs. This guide addresses the specific Store/UWP context described by Microsoft, not every Win32 deployment with the same code.
 

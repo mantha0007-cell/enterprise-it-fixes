@@ -12,7 +12,7 @@ tags: ["configuration-manager", "pxe", "ip-helper", "network"]
 errorCodes: []
 eventIds: []
 logFiles: ["SMSPXE.log", "DHCP server logs"]
-symptoms: ["PXE works on the distribution point VLAN but not on a remote subnet.", "Clients fail to discover a PXE-enabled distribution point."]
+symptoms: ["A client on a routed VLAN fails before reaching the Configuration Manager boot workflow.", "Same-site clients start PXE while remote-subnet clients do not."]
 visibility: published
 
 sources:
@@ -22,6 +22,10 @@ sources:
 ## Short answer
 
 PXE discovery relies on network traffic that does not cross routers as a normal broadcast. For clients on a different subnet, configure and validate router IP helpers to forward the required traffic to the DHCP service and PXE-enabled Configuration Manager distribution point. Compare a same-subnet client with a remote-subnet client before changing boot images or task sequences.
+
+## Our diagnostic lens
+
+Break the boot attempt into checkpoints: **address lease → PXE request reaches the intended distribution point → server selects a boot image → client downloads and starts it**. Compare one working and one failing subnet at the same checkpoint. If the client never appears in `SMSPXE.log`, stay with relay/routing and endpoint reachability. If the request is logged, move to Configuration Manager site, boundary, and boot-image checks. This assigns the next investigation to the layer that first diverges.
 
 ## Symptoms
 
@@ -47,7 +51,7 @@ Microsoft Configuration Manager current branch, PXE-enabled distribution point, 
 6. Confirm the target distribution point is PXE-enabled and its boot images are distributed.
 
 ## Likely causes
-The router does not forward the PXE discovery traffic from the client subnet to the relevant services, or forwards it to an incomplete/wrong destination. DHCP options 60, 66, and 67 are not the general substitute for correctly configured IP helpers in this Configuration Manager design. Microsoft notes a narrow option 60 exception when DHCP and Windows Deployment Services run on the same server; verify current vendor guidance for the actual topology.
+The first missing checkpoint is often a relay path that does not reach every service required by the design. A working lease by itself does not prove that PXE discovery reaches the distribution point. DHCP options 60, 66, and 67 are not a general replacement for IP helpers in this Configuration Manager topology; verify the specific DHCP/WDS arrangement against Microsoft's current guidance.
 
 ## Suggested troubleshooting steps
 Coordinate with the network owner to configure the router’s IP helper addresses for the DHCP service and PXE-enabled distribution point required by the design. Avoid blanket changes to DHCP options 66/67; incorrect boot server or filename values can break clients and may not support the Configuration Manager scenario.

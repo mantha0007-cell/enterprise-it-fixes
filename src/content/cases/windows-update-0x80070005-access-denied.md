@@ -12,7 +12,7 @@ tags: ['Windows Update', 'access denied', 'permissions', 'CBS', 'TrustedInstalle
 errorCodes: ['0x80070005', 'E_ACCESSDENIED']
 eventIds: []
 logFiles: ['WindowsUpdate.log', '%windir%\\Logs\\CBS\\CBS.log']
-symptoms: ['Windows update installation fails with access denied', 'CBS failed to create file']
+symptoms: ['Servicing stops when Windows Update cannot open or create a required object.', 'A CBS or Windows Update log records an access-denied result.']
 visibility: published
 
 sources:
@@ -25,6 +25,10 @@ sources:
 ## Short answer
 
 0x80070005 means E_ACCESSDENIED; it does not name one universal broken permission. Correlate the failure time with CBS.log or WindowsUpdate.log, identify the object being denied, and then repair that specific cause. Microsoft lists component-store permissions, TrustedInstaller ownership, security software, SYSTEM rights, and management policy as possible causes. Back up the OS disk before permission repairs.
+
+## Our diagnostic lens
+
+Anchor the investigation on the **first denied object at the failure timestamp**. A path under servicing, a registry location, and an operation intercepted by endpoint software lead to different owners and remedies. Capture the surrounding log lines, identify the process and target if available, then inspect only that object's access path. This is why a broad permission reset is a poor first move: it changes many controls without telling you which one caused the denial.
 
 
 ## Problem / symptoms

@@ -26,6 +26,10 @@ sources:
 
 0x800f081f is CBS_E_SOURCE_MISSING: servicing could not find a required package or repair file. On an affected, elevated device, run DISM component-store repair and then System File Checker. If DISM cannot reach a usable repair source, provide installation media that matches the target Windows release, edition, language, and servicing level; a mismatched image can leave the error unresolved.
 
+## Our diagnostic lens
+
+Think of repair as a source-selection problem with three links: **the damaged component the log names → the source Windows is configured to use → a payload in that source that matches the target image**. DISM succeeding or failing is useful only when you know which source it consulted. If using media, confirm the correct image index and servicing compatibility instead of cycling through unrelated ISOs. This narrows the next action to source policy, image matching, or the missing payload itself.
+
 
 ## Problem / symptoms
 

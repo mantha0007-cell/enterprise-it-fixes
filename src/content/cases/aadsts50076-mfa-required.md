@@ -28,6 +28,10 @@ sources:
 
 AADSTS50076 means this sign-in needs an MFA claim that the current session did not satisfy. Have the user complete the expected interactive MFA challenge and retry. If this is unexpected or repeats, inspect the matching Microsoft Entra sign-in event and its Conditional Access and Authentication Details tabs to see which policy or context triggered MFA. Do not disable MFA as a first response.
 
+## Our diagnostic lens
+
+Separate two situations: **a challenge is expected but has not been completed**, or **the user completes MFA yet the same request still fails**. In the first, help the user finish the normal challenge and check the registered method. In the second, compare the event's authentication steps with the policy result and requested resource. That distinction keeps an ordinary step-up prompt from being mistaken for a broken MFA service, while still exposing a policy/session mismatch when the challenge alone does not resolve the sign-in.
+
 Use the sign-in event and policy details to determine which requirement applies in the affected tenant.
 
 ## Problem / symptoms

@@ -12,7 +12,7 @@ tags: ['Conditional Access', 'authentication', 'device compliance', 'sign-in log
 errorCodes: ['AADSTS53003', '53003']
 eventIds: []
 logFiles: ['Microsoft Entra sign-in logs', 'Microsoft Entra audit logs']
-symptoms: ['Access has been blocked by Conditional Access policies', 'Sign-in failure shows Conditional Access status failure']
+symptoms: ['The sign-in event records a Conditional Access denial.', 'A user reaches authentication but is refused access to a protected resource.']
 visibility: published
 
 sources:
@@ -29,6 +29,10 @@ sources:
 ## Short answer
 
 AADSTS53003 means Microsoft Entra Conditional Access blocked the sign-in request. The code does not identify which policy or condition caused the block. Find the matching failed sign-in event and open its **Conditional Access** tab to see the policy results; inspect device, client app, location, user, resource, and authentication details to understand the failed condition. Correct the condition or assignment only if the policy result conflicts with the organization's intended access rule. Do not disable Conditional Access as a generic fix.
+
+## Our diagnostic lens
+
+Follow the event, not the name of the app the user remembers clicking. One sign-in flow can request a dependent resource, and the evaluated resource may be the one denied. In the matching event, record the resource, the policy result, and the unmet grant or condition before considering a change. Use **What If** to explore a policy scenario, then compare that simulation with the actual event; a simulation does not replace the sign-in record.
 
 
 ## Problem / symptoms

@@ -12,7 +12,7 @@ tags: ["exchange-online", "mail-flow", "forwarding", "ndr"]
 errorCodes: ["550 5.7.520"]
 eventIds: []
 logFiles: ["Non-delivery report (NDR)", "Message trace"]
-symptoms: ["A message is not automatically forwarded to an external address.", "The sender receives NDR 550 5.7.520."]
+symptoms: ["An automatic forward to an external recipient returns 550 5.7.520.", "Message trace shows rejection during outbound forwarding rather than initial delivery."]
 visibility: published
 
 sources:
@@ -22,6 +22,10 @@ sources:
 ## Short answer
 
 This NDR identifies an outbound-spam-policy restriction on automatic external forwarding. Confirm that the message was automatically forwarded and inspect the effective outbound spam policy before changing configuration. Do not enable external forwarding tenant-wide as a quick fix.
+
+## Our diagnostic lens
+
+Start from the mail-flow path, not the policy toggle: **original delivery → forwarding mechanism → outbound policy evaluation → external handoff**. Message trace should show where the path stopped. Then identify whether the mailbox rule, mailbox setting, or transport rule initiated forwarding and which outbound policy applies to that sender. If forwarding was never intended, treat the rule as a possible security issue; if it was approved, scope any exception to the business need and destination.
 
 ## Symptoms
 

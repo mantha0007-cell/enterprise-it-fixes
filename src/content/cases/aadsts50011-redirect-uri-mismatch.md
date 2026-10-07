@@ -12,7 +12,7 @@ tags: ['authentication', 'app registration', 'OAuth 2.0', 'OpenID Connect', 'SSO
 errorCodes: ['AADSTS50011']
 eventIds: []
 logFiles: ['Microsoft Entra sign-in logs']
-symptoms: ['The redirect URI specified in the request does not match the redirect URIs configured for the application.']
+symptoms: ['Sign-in stops while Microsoft Entra checks the application return address.']
 visibility: published
 
 sources:
@@ -28,7 +28,18 @@ sources:
 
 AADSTS50011 means the application sent a redirect_uri that Microsoft Entra ID cannot match to a URI registered for that app. Compare the URI in the failed authorization request with App registrations → your app → Authentication. Correct the application configuration if it sent the wrong callback; otherwise add the intended URI under the correct platform type. Do not add a URI you do not control.
 
-This is a vendor-documentation guide. It has not been reproduced in a customer environment by this site.
+
+## Our diagnostic lens
+
+Treat the failure as a three-value comparison rather than an instruction to add another URI:
+
+| Value to compare | Where it comes from | What a difference suggests |
+| --- | --- | --- |
+| Callback generated at runtime | Failed authorization request | The app, proxy, or deployment setting may be producing the wrong address. |
+| Callback expected by the application | App configuration and public URL | A stale base URL, scheme, port, or path may be involved. |
+| Callback registered with Entra | App registration and platform type | The intended callback may be missing from the matching registration. |
+
+Find the first pair that differs. Change the component that owns that value; adding every observed URL to the registration can make an unintended endpoint trusted.
 
 ## Problem / symptoms
 

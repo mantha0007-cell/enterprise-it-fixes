@@ -12,6 +12,10 @@ Complete this review before publishing a page to the public repository.
 - [ ] Suggested changes are scoped, explain relevant risks, and direct readers to vendor documentation where appropriate.
 - [ ] The short answer explains the symptom and scope without promising a universal fix.
 - [ ] The article uses original wording. Only short exact error text needed to identify a problem is reproduced; vendor text, screenshots, and diagrams are not copied.
+- [ ] The guide contributes a specific diagnostic interpretation or decision path of its own, rather than only summarizing source material.
+- [ ] The prose was compared with every cited source. Rewrite unnecessary long exact matches; a phrase scan is an editorial aid, not proof of legal clearance.
+- [ ] `pnpm check:originality` completes with all source pages available and no unresolved phrase matches.
+- [ ] When a passage feels too close to the source or its originality is uncertain, remove it and link the reader to the source instead.
 - [ ] Publication and update dates are accurate.
 
 ## Privacy and security
