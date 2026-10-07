@@ -7,7 +7,7 @@ An English-language library for enterprise IT troubleshooting. Search exact erro
 - **Documented guide — not field-tested:** original troubleshooting guidance based on linked vendor documentation. It is not presented as an incident investigated or reproduced by this site.
 - **Field-verified fix:** a real issue with recorded evidence, an identified root cause, a fix applied, and a successful retest in the stated environment.
 
-This repository currently publishes ten documented guides. The sample page is a non-indexed draft and is excluded from case routes, search, browsing, and the sitemap. No analytics or advertising code is included.
+This repository currently publishes ten documented guides. The sample page is a non-indexed draft and is excluded from case routes, search, browsing, and the sitemap. Cloudflare Web Analytics is enabled for the Pages project. Google Analytics is prepared but remains inactive until a GA4 Measurement ID is configured; its tag is gated behind an explicit analytics choice. No advertising code or slots are active.
 
 ## Published guides
 
@@ -27,6 +27,12 @@ These topics target specific troubleshooting queries. Search demand and traffic 
 ## Hosting
 
 The site is published on [Cloudflare Pages](https://enterprise-it-fixes.pages.dev/). Cloudflare builds the main branch from the GitHub repository with the Astro preset, pnpm build, and dist as the output directory. SITE_URL is set to the production URL so canonical links and the sitemap use the public origin. The Cloudflare GitHub App is restricted to this repository.
+
+## Analytics and advertising
+
+Cloudflare Web Analytics is enabled in the Pages project and is injected by Cloudflare on the next deployment. Google Analytics is prepared as an optional feature. To activate it, set `PUBLIC_GA_MEASUREMENT_ID` to the GA4 web stream ID (`G-...`) in the Cloudflare Pages production build environment. The site then shows an accept/reject choice and loads the Google tag only after the visitor opts in. Without a valid ID, no consent prompt or Google request is emitted. Test the choice and withdrawal flow before activation.
+
+Advertising remains off. Apply for AdSense only when the site has enough distinctive, useful content for review. Google must approve the site before ads can be served; personalized ads to EEA, UK, or Swiss visitors require a Google-certified CMP integrated with IAB TCF. Do not add ad code until account approval, the consent setup, and ad placement review are complete. If approved, use at most a small number of clearly separated placements that do not interrupt troubleshooting steps.
 
 ## Add or update a guide
 
