@@ -4,5 +4,8 @@ const data = [{ label: 'Home', href: '/' }, ...items];
 const structured = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: data.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.label, ...(item.href ? { item: Astro.site ? new URL(item.href, Astro.site).toString() : item.href } : {}) })) };
 ---
 <nav class="breadcrumbs" aria-label="Breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
-  {data.map((item, index) => <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><meta itemprop="position" content={String(index + 1)} />{item.href && index < data.length - 1 ? <a itemprop="item" href={item.href}><span itemprop="name">{item.label}</span></a> : <span itemprop="name" aria-current="page">{item.label}</span>}</span>)}
+  {data.map((item, index) => <>
+    {index > 0 && <span class="breadcrumb-separator" aria-hidden="true">/</span>}
+    <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><meta itemprop="position" content={String(index + 1)} />{item.href && index < data.length - 1 ? <a itemprop="item" href={item.href}><span itemprop="name">{item.label}</span></a> : <span itemprop="name" aria-current="page">{item.label}</span>}</span>
+  </>)}
 </nav>

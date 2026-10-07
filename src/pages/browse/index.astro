@@ -1,67 +1,77 @@
 ---
 import { getCollection } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import CaseCard from '../../components/CaseCard.astro';
 import { facets, slugify } from '../../lib/cases';
 
 const entries = await getCollection('cases', ({ data }) => data.visibility === 'published');
 const groups = facets(entries);
 const sorted = [...entries].sort((a, b) => a.data.title.localeCompare(b.data.title));
-const products = groups.products.map((name) => ({ name, count: entries.filter((entry) => entry.data.product === name).length }));
-const categories = groups.categories.map((name) => ({ name, count: entries.filter((entry) => entry.data.category === name).length }));
+const products = groups.products.map((name) => ({ name, slug: slugify(name) }));
+const categories = groups.categories.map((name) => ({ name, slug: slugify(name) }));
+const guideRows = sorted.map((entry, index) => ({
+  entry,
+  index,
+  identifier: entry.data.errorCodes[0] || entry.data.eventIds[0] || 'Guide',
+  productSlug: slugify(entry.data.product),
+  categorySlug: slugify(entry.data.category),
+  searchText: [entry.data.title, entry.data.description, entry.data.product, entry.data.category, ...entry.data.errorCodes, ...entry.data.eventIds, ...entry.data.logFiles].join(' ').toLocaleLowerCase(),
+}));
 ---
-<SiteLayout title="Browse troubleshooting guides | Enterprise IT Fixes" description="Browse practical enterprise IT troubleshooting guides by product and issue area, or search an exact error or symptom.">
-  <div class="page browse-page">
-    <p class="eyebrow">Guide library · {entries.length} guides</p>
-    <h1 class="page-title">Find a guide for your issue.</h1>
-    <p class="page-lead">Search by the message you see, or narrow the list by product or issue area.</p>
-    <form class="search-form" action="/search/" method="get" role="search">
-      <label class="sr-only" for="browse-search">Search troubleshooting guides</label>
-      <input id="browse-search" type="search" name="q" placeholder="Search an error, event ID, product, or symptom…" />
-      <button type="submit">Search guides <span aria-hidden="true">→</span></button>
-    </form>
+<SiteLayout title="Browse troubleshooting guides | Enterprise IT Fixes" description="Search and filter practical enterprise IT troubleshooting guides by exact error, product, or issue area.">
+  <div class="page library-page">
+    <header class="library-heading">
+      <p class="eyebrow">The guide library <span aria-hidden="true">/</span> {entries.length} guides</p>
+      <h1 class="page-title">Troubleshooting guides</h1>
+      <p class="page-lead">Start with the error or symptom. Filter down to the product and issue area.</p>
+    </header>
 
-    <section class="browse-facets" aria-label="Browse guides">
-      <div class="browse-facet-group">
-        <h2>Products</h2>
-        <nav aria-label="Browse by product">
-          {products.map(({ name, count }) => <a href={`/browse/products/${slugify(name)}/`}>{name}<span>{count}</span></a>)}
-        </nav>
-      </div>
-      <div class="browse-facet-group">
-        <h2>Issue areas</h2>
-        <nav aria-label="Browse by issue area">
-          {categories.map(({ name, count }) => <a href={`/browse/categories/${slugify(name)}/`}>{name}<span>{count}</span></a>)}
-        </nav>
-      </div>
+    <section class="library-tools" aria-label="Find a guide">
+      <label class="library-search"><span>Search guides</span><input type="search" placeholder="Error code, event ID, symptom…" autocomplete="off" data-guide-search /></label>
+      <label><span>Product</span><select data-product-filter><option value="">All products</option>{products.map(({ name, slug }) => <option value={slug}>{name}</option>)}</select></label>
+      <label><span>Issue area</span><select data-category-filter><option value="">All issue areas</option>{categories.map(({ name, slug }) => <option value={slug}>{name}</option>)}</select></label>
+      <p class="library-count" data-guide-count aria-live="polite">{sorted.length} guides</p>
     </section>
 
-    <section class="section browse-guides">
-      <div class="section-heading"><div><p class="eyebrow">Full library</p><h2>All troubleshooting guides</h2></div><span>{sorted.length} results</span></div>
-      {sorted.length ? <div class="case-grid">{sorted.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state">No guides have been published yet.</p>}
-    </section>
+    <ul class="guide-list" aria-label="Troubleshooting guides">
+      {guideRows.map(({ entry, index, identifier, productSlug, categorySlug, searchText }) => <li class="guide-row" data-guide-row data-product={productSlug} data-category={categorySlug} data-search-text={searchText}>
+        <a class="guide-row-link" href={`/cases/${entry.data.slug}/`}>
+          <span class="guide-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+          <span class="guide-copy"><span class="guide-category">{entry.data.category}</span><h2>{entry.data.title}</h2><span class="guide-summary">{entry.data.description}</span></span>
+          <span class="guide-identifier">{identifier}</span><span class="guide-arrow" aria-hidden="true">↗</span>
+        </a>
+      </li>)}
+    </ul>
+    <p class="library-empty" data-guide-empty hidden>No guides match those filters. Clear a filter or try a different search.</p>
+    <p class="library-footnote">Each guide links to its vendor references and explains where the checks may depend on your environment.</p>
   </div>
 </SiteLayout>
+<script is:inline src="/library-filter.js"></script>
 <style>
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-  .browse-page{padding-top:40px}
-  .browse-page>.eyebrow{margin-bottom:8px}
-  .browse-page>.page-title{margin-top:0;font-size:clamp(2.2rem,4.5vw,3.6rem)}
-  .browse-page>.page-lead{margin:0 0 22px}
-  .browse-page .search-form{max-width:780px;margin:0 0 29px}
-  .browse-facets{display:grid;grid-template-columns:1fr 1fr;gap:26px;padding:21px 0 24px;border-top:1px solid #dce3e8;border-bottom:1px solid #dce3e8}
-  .browse-facet-group h2{margin:0 0 12px;color:#243540;font-size:.94rem}
-  .browse-facet-group nav{display:flex;flex-wrap:wrap;gap:8px}
-  .browse-facet-group nav a{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #dce3e8;border-radius:8px;background:white;color:#334651;font-size:.81rem;text-decoration:none;transition:border-color .15s,background .15s}
-  .browse-facet-group nav a:hover{border-color:#85c8c0;background:#f0faf8;color:#075e62}
-  .browse-facet-group nav span{display:inline-grid;min-width:19px;height:19px;place-items:center;border-radius:999px;background:#edf1f2;color:#62717a;font-size:.68rem}
-  .browse-guides{margin-top:32px}
-  .browse-guides .section-heading{align-items:end}
-  .browse-guides .section-heading .eyebrow{margin:0 0 3px;font-size:.68rem}
-  .browse-guides .section-heading h2{font-size:1.42rem}
-  .browse-guides .section-heading>span{color:#6a7982;font-size:.82rem}
-  .browse-guides .case-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
-  .browse-guides .case-card{min-height:175px;padding:18px;border-radius:12px}
-  @media(max-width:700px){.browse-facets{grid-template-columns:1fr;gap:19px}.browse-guides .case-grid{grid-template-columns:1fr}}
-  @media(max-width:620px){.browse-page{padding-top:30px}.browse-page .search-form{display:grid;grid-template-columns:1fr}.browse-page .search-form button{width:100%}.browse-guides .section-heading h2{font-size:1.23rem}}
+  .library-page{max-width:1040px;padding-top:47px}
+  .library-heading .eyebrow{margin:0 0 8px}
+  .library-heading .page-title{margin:0;font-size:clamp(2.2rem,4.5vw,3.45rem);letter-spacing:-.06em}
+  .library-heading .page-lead{margin:9px 0 25px;font-size:1rem}
+  .library-tools{display:grid;grid-template-columns:minmax(250px,1fr) minmax(160px,.58fr) minmax(160px,.58fr) auto;align-items:end;gap:12px;padding:16px;background:#fff;border:1px solid #dce3e8;border-radius:14px;box-shadow:0 8px 24px #14283209}
+  .library-tools label{display:grid;gap:5px;min-width:0}
+  .library-tools label>span{color:#61717a;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .library-tools input,.library-tools select{width:100%;height:42px;min-width:0;border:1px solid #d5dfe3;border-radius:8px;background:#fff;color:#253741;padding:0 11px;font:inherit;font-size:.85rem}
+  .library-tools input:focus,.library-tools select:focus{outline:2px solid #72bbb4;outline-offset:1px;border-color:#4faba3}
+  .library-count{min-width:56px;margin:0 2px 10px 0;color:#60717a;font-size:.78rem;text-align:right;white-space:nowrap}
+  .guide-list{list-style:none;padding:0;margin:21px 0 0;border-top:1px solid #d9e1e5}
+  .guide-row{border-bottom:1px solid #d9e1e5}
+  .guide-row[hidden]{display:none}
+  .guide-row-link{display:grid;grid-template-columns:38px minmax(0,1fr) auto 24px;align-items:center;gap:15px;padding:17px 10px;color:inherit;text-decoration:none;transition:background .15s}
+  .guide-row-link:hover{background:#fff;border-radius:9px;color:inherit}
+  .guide-number{align-self:start;padding-top:4px;color:#91a0a8;font-size:.77rem;font-variant-numeric:tabular-nums}
+  .guide-copy{display:grid;gap:3px;min-width:0}
+  .guide-category{color:#087e83;font-size:.63rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+  .guide-copy h2{margin:0;color:#172630;font-size:1.02rem;line-height:1.35;letter-spacing:-.015em}
+  .guide-summary{overflow:hidden;color:#64737c;font-size:.82rem;text-overflow:ellipsis;white-space:nowrap}
+  .guide-identifier{padding:5px 8px;border:1px solid #e0e7e9;border-radius:6px;background:#f8faf9;color:#3d515c;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.72rem;white-space:nowrap}
+  .guide-arrow{color:#087e83;font-size:1.08rem;text-align:right}
+  .library-empty{margin:20px 0;padding:26px;border:1px dashed #c8d4d9;border-radius:12px;color:#61717a;text-align:center}
+  .library-footnote{margin:19px 0 0;color:#718089;font-size:.77rem}
+  @media(max-width:780px){.library-tools{grid-template-columns:1fr 1fr}.library-search{grid-column:1/-1}.library-count{grid-column:1/-1;margin:0;text-align:left}}
+  @media(max-width:540px){.library-page{padding-top:31px}.library-tools{grid-template-columns:1fr;gap:10px}.library-search{grid-column:auto}.library-count{grid-column:auto}.guide-row-link{grid-template-columns:25px minmax(0,1fr) 18px;gap:10px;padding:15px 4px}.guide-identifier{grid-column:2;justify-self:start;margin-top:5px}.guide-arrow{grid-column:3;grid-row:1}.guide-summary{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.guide-copy h2{font-size:.94rem}}
 </style>
