@@ -2,31 +2,82 @@
 import { getCollection } from 'astro:content';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import CaseCard from '../components/CaseCard.astro';
+import { slugify } from '../lib/cases';
+
 const allCases = await getCollection('cases', ({ data }) => data.visibility === 'published');
-const recent = [...allCases].sort((a,b) => b.data.dateModified.valueOf() - a.data.dateModified.valueOf()).slice(0,6);
-const products = [...new Set(allCases.map(({data}) => data.product))].sort();
-const categories = [...new Set(allCases.map(({data}) => data.category))].sort();
-const vendors = [...new Set(allCases.map(({data}) => data.vendor))].sort();
+const featuredSlugs = [
+  'aadsts50011-redirect-uri-mismatch',
+  'configmgr-pxe-remote-subnet-ip-helper',
+  'windows-update-0x800f081f',
+];
+const featured = featuredSlugs.map((slug) => allCases.find((entry) => entry.data.slug === slug)).filter(Boolean);
+const categoryCounts = new Map<string, number>();
+for (const entry of allCases) categoryCounts.set(entry.data.category, (categoryCounts.get(entry.data.category) ?? 0) + 1);
+const quickCategories = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
 ---
-<SiteLayout description="Practical enterprise IT troubleshooting guides for exact errors, event IDs, log lines, products, and symptoms, with links to vendor sources.">
-  <div class="page">
-    <section class="hero">
-      <p class="eyebrow">Enterprise troubleshooting notes</p>
-      <h1>Practical guidance for<br />complex IT problems.</h1>
-      <p class="lead">Search exact errors, event IDs, log lines, and product combinations. Find practical troubleshooting steps and source links to help investigate similar IT problems.</p>
-      <form class="search-form" action="/search/" method="get" role="search"><label class="sr-only" for="home-search">Search troubleshooting guides</label><input id="home-search" type="search" name="q" placeholder="Search an error, event ID, product, or symptom…" /><button type="submit">Search guides</button></form>
-      <p class="search-hint">Search guide titles, symptoms, products, vendors, versions, tags, error codes, event IDs, and log files.</p>
+<SiteLayout description="Find practical enterprise IT troubleshooting guidance by exact error, event ID, product, or symptom, with direct links to vendor sources.">
+  <div class="page home-page">
+    <section class="hero home-hero">
+      <p class="eyebrow">Enterprise troubleshooting, minus the noise</p>
+      <h1>Find the right<br class="desktop-break" /> next check.</h1>
+      <p class="lead">Search an exact error, event ID, product, or symptom. Get a focused diagnostic path with sources you can verify.</p>
+      <form class="search-form" action="/search/" method="get" role="search">
+        <label class="sr-only" for="home-search">Search troubleshooting guides</label>
+        <input id="home-search" type="search" name="q" placeholder="Try AADSTS50011, Event 4013, or a symptom…" />
+        <button type="submit">Search guides <span aria-hidden="true">→</span></button>
+      </form>
+      <div class="home-signals" aria-label="About these guides">
+        <span><b>{allCases.length}</b> focused guides</span>
+        <span>Linked vendor sources</span>
+        <span>Environment-aware checks</span>
+      </div>
     </section>
-    <section class="section">
-      <div class="section-heading"><h2>Recently updated troubleshooting guides</h2><a href="/browse/">Browse all →</a></div>
-      {recent.length ? <div class="case-grid">{recent.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state">The first troubleshooting guide will appear here.</p>}
+
+    <section class="section home-featured">
+      <div class="section-heading"><div><p class="eyebrow">Get started</p><h2>Guides worth opening first</h2></div><a href="/browse/">Browse all {allCases.length} guides <span aria-hidden="true">→</span></a></div>
+      {featured.length ? <div class="case-grid">{featured.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state">Guides will appear here as they are published.</p>}
     </section>
-    <section class="section"><div class="section-heading"><h2>Start with an exact error or event</h2></div><div class="facet-list">{allCases.map((entry) => <a class="facet-chip" href={`/cases/${entry.data.slug}/`}>{entry.data.errorCodes[0] || entry.data.eventIds[0] || entry.data.symptoms[0]}</a>)}</div></section>
-    <section class="section split">
-      <div class="info-panel"><div class="section-heading"><h2>Browse by product</h2><a href="/browse/">All topics →</a></div><div class="facet-list">{products.map((name) => <a class="facet-chip" href={`/browse/products/${encodeURIComponent(name.toLowerCase().replaceAll(' ','-'))}/`}>{name}</a>)}</div></div>
-      <div class="info-panel"><h2>Browse by category</h2><div class="facet-list">{categories.map((name) => <a class="facet-chip" href={`/browse/categories/${encodeURIComponent(name.toLowerCase().replaceAll(' ','-'))}/`}>{name}</a>)}</div><h2 style="margin-top:24px">Vendors</h2><div class="facet-list">{vendors.map((name) => <a class="facet-chip" href={`/browse/vendors/${encodeURIComponent(name.toLowerCase().replaceAll(' ','-'))}/`}>{name}</a>)}</div></div>
+
+    <section class="home-topics" aria-labelledby="home-topics-title">
+      <h2 id="home-topics-title">Browse by issue area</h2>
+      <nav aria-label="Issue categories" class="topic-links">
+        {quickCategories.map(([name, count]) => <a href={`/browse/categories/${slugify(name)}/`}>{name}<span>{count}</span></a>)}
+        <a class="all-topics" href="/browse/">All topics <span aria-hidden="true">↗</span></a>
+      </nav>
+      <p>Vendor-linked guidance. Check that each step fits your environment.</p>
     </section>
-    <aside class="notice"><strong>Use your own context.</strong> Troubleshooting guidance can help narrow down similar symptoms, but the cause and right change depend on your environment. Check the linked vendor sources and your change-control process.</aside>
   </div>
 </SiteLayout>
-<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}</style>
+<style>
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .home-page{padding-top:28px}
+  .home-hero{position:relative;isolation:isolate;overflow:hidden;max-width:none;margin:0;padding:clamp(32px,6vw,68px);border:1px solid #273c48;border-radius:24px;background:radial-gradient(ellipse at 82% 5%,#167c7b55,transparent 38%),linear-gradient(120deg,#101a24 0%,#132b37 62%,#113d43 100%);box-shadow:0 24px 60px #10212a1c}
+  .home-hero:after{position:absolute;z-index:-1;right:-72px;bottom:-210px;width:480px;height:480px;border:1px solid #9ce4dc20;border-radius:50%;box-shadow:0 0 0 44px #9ce4dc08,0 0 0 90px #9ce4dc06;content:""}
+  .home-hero .eyebrow{color:#8fe3d9;letter-spacing:.16em}
+  .home-hero h1{max-width:760px;margin:.4rem 0 1rem;color:#f5fbfc;font-size:clamp(2.8rem,6vw,5rem);line-height:.98;letter-spacing:-.065em}
+  .home-hero .lead{max-width:620px;margin:0;color:#c5d5db;font-size:clamp(1rem,1.7vw,1.16rem)}
+  .home-hero .search-form{position:relative;z-index:1;max-width:740px;margin:28px 0 17px;padding:7px;border:1px solid #ffffff40;border-radius:13px;background:#fff;box-shadow:0 16px 35px #07131b35}
+  .home-hero .search-form input{padding:14px 15px;font-size:.98rem}
+  .home-hero .search-form input:focus-visible{outline:2px solid #0b8383;outline-offset:1px;border-radius:5px}
+  .home-hero .search-form button{border-radius:9px;padding:13px 18px;white-space:nowrap}
+  .home-signals{display:flex;flex-wrap:wrap;gap:9px 24px;color:#cad9df;font-size:.82rem}
+  .home-signals span{display:inline-flex;align-items:center;gap:7px}
+  .home-signals span:before{width:6px;height:6px;border-radius:50%;background:#7bd6ca;content:""}
+  .home-signals b{color:white}
+  .home-featured{margin-top:42px}
+  .home-featured .section-heading{align-items:end;margin-bottom:17px}
+  .home-featured .section-heading .eyebrow{margin:0 0 4px;font-size:.68rem}
+  .home-featured .section-heading h2{font-size:1.48rem}
+  .home-featured .case-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .home-featured .case-card{min-height:188px;padding:19px;border-radius:14px}
+  .home-topics{display:flex;align-items:center;gap:20px;margin-top:30px;padding:17px 0;border-top:1px solid #d7e0e4;border-bottom:1px solid #d7e0e4}
+  .home-topics h2{flex:0 0 auto;margin:0;color:#22333e;font-size:.91rem}
+  .topic-links{display:flex;flex:1;flex-wrap:wrap;gap:8px 18px}
+  .topic-links a{display:inline-flex;align-items:center;gap:7px;color:#40525d;font-size:.84rem;text-decoration:none}
+  .topic-links a:hover{color:var(--teal);text-decoration:underline;text-underline-offset:3px}
+  .topic-links a span:not([aria-hidden]){display:inline-grid;min-width:20px;height:20px;place-items:center;border-radius:999px;background:#e7eeef;color:#52636c;font-size:.7rem}
+  .topic-links .all-topics{color:var(--teal);font-weight:700}
+  .home-topics>p{flex:0 0 auto;margin:0;color:#687781;font-size:.75rem}
+  @media(max-width:850px){.home-topics{align-items:flex-start;flex-direction:column;gap:10px}.home-topics>p{margin-top:0}}
+  @media(max-width:620px){.home-page{padding-top:18px}.home-hero{padding:31px 22px;border-radius:18px}.home-hero h1{font-size:2.8rem}.home-hero .search-form{display:grid;grid-template-columns:1fr}.home-hero .search-form button{width:100%}.home-signals{gap:8px 15px}.home-featured{margin-top:31px}.home-featured .section-heading{align-items:flex-start}.home-featured .section-heading h2{font-size:1.3rem}.home-featured .section-heading>a{font-size:.8rem;text-align:right}.home-featured .case-grid{grid-template-columns:1fr}.home-featured .case-card{min-height:0}.desktop-break{display:none}.home-topics{margin-top:20px}.topic-links{gap:10px 16px}}
+</style>

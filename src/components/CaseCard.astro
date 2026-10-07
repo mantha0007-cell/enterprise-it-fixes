@@ -2,7 +2,12 @@
 const { entry } = Astro.props;
 ---
 <a class="case-card" href={`/cases/${entry.data.slug}/`}>
+  <span class="card-kicker">{entry.data.category}</span>
   <h3>{entry.data.title}</h3>
   <p>{entry.data.description}</p>
-  <span class="card-meta">{entry.data.vendor} · {entry.data.product} · Updated {entry.data.dateModified.toISOString().slice(0, 10)}</span>
+  <span class="card-meta">{entry.data.errorCodes[0] || entry.data.eventIds[0] || entry.data.product}<span aria-hidden="true"> →</span></span>
 </a>
+<style>
+  .case-card .card-kicker{margin:0;color:#687984;font-size:.67rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .case-card .card-meta{color:#087e83;font-size:.8rem;font-weight:700}
+</style>

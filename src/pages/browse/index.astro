@@ -3,16 +3,65 @@ import { getCollection } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import CaseCard from '../../components/CaseCard.astro';
 import { facets, slugify } from '../../lib/cases';
-const entries = await getCollection('cases', ({data}) => data.visibility === 'published');
+
+const entries = await getCollection('cases', ({ data }) => data.visibility === 'published');
 const groups = facets(entries);
-const sorted = [...entries].sort((a,b) => b.data.dateModified.valueOf() - a.data.dateModified.valueOf());
+const sorted = [...entries].sort((a, b) => a.data.title.localeCompare(b.data.title));
+const products = groups.products.map((name) => ({ name, count: entries.filter((entry) => entry.data.product === name).length }));
+const categories = groups.categories.map((name) => ({ name, count: entries.filter((entry) => entry.data.category === name).length }));
 ---
-<SiteLayout title="Browse troubleshooting guides | Enterprise IT Fixes" description="Browse practical enterprise IT troubleshooting guides by product, vendor, category, and tag.">
-  <div class="page"><p class="eyebrow">Guide library</p><h1 class="page-title">Browse troubleshooting guides</h1><p class="page-lead">Find a guide by the product, vendor, category, or tag that matches your environment.</p>
-    <section class="section"><div class="section-heading"><h2>Products</h2></div><div class="facet-list">{groups.products.map((value) => <a class="facet-chip" href={`/browse/products/${slugify(value)}/`}>{value}</a>)}</div></section>
-    <section class="section"><div class="section-heading"><h2>Vendors</h2></div><div class="facet-list">{groups.vendors.map((value) => <a class="facet-chip" href={`/browse/vendors/${slugify(value)}/`}>{value}</a>)}</div></section>
-    <section class="section"><div class="section-heading"><h2>Categories</h2></div><div class="facet-list">{groups.categories.map((value) => <a class="facet-chip" href={`/browse/categories/${slugify(value)}/`}>{value}</a>)}</div></section>
-    <section class="section"><div class="section-heading"><h2>Tags</h2></div><div class="facet-list">{groups.tags.map((value) => <a class="facet-chip" href={`/browse/tags/${slugify(value)}/`}>{value}</a>)}</div></section>
-    <section class="section"><div class="section-heading"><h2>All guides ({sorted.length})</h2></div>{sorted.length ? <div class="case-grid">{sorted.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state">No guides have been published yet.</p>}</section>
+<SiteLayout title="Browse troubleshooting guides | Enterprise IT Fixes" description="Browse practical enterprise IT troubleshooting guides by product and issue area, or search an exact error or symptom.">
+  <div class="page browse-page">
+    <p class="eyebrow">Guide library · {entries.length} guides</p>
+    <h1 class="page-title">Find a guide for your issue.</h1>
+    <p class="page-lead">Search by the message you see, or narrow the list by product or issue area.</p>
+    <form class="search-form" action="/search/" method="get" role="search">
+      <label class="sr-only" for="browse-search">Search troubleshooting guides</label>
+      <input id="browse-search" type="search" name="q" placeholder="Search an error, event ID, product, or symptom…" />
+      <button type="submit">Search guides <span aria-hidden="true">→</span></button>
+    </form>
+
+    <section class="browse-facets" aria-label="Browse guides">
+      <div class="browse-facet-group">
+        <h2>Products</h2>
+        <nav aria-label="Browse by product">
+          {products.map(({ name, count }) => <a href={`/browse/products/${slugify(name)}/`}>{name}<span>{count}</span></a>)}
+        </nav>
+      </div>
+      <div class="browse-facet-group">
+        <h2>Issue areas</h2>
+        <nav aria-label="Browse by issue area">
+          {categories.map(({ name, count }) => <a href={`/browse/categories/${slugify(name)}/`}>{name}<span>{count}</span></a>)}
+        </nav>
+      </div>
+    </section>
+
+    <section class="section browse-guides">
+      <div class="section-heading"><div><p class="eyebrow">Full library</p><h2>All troubleshooting guides</h2></div><span>{sorted.length} results</span></div>
+      {sorted.length ? <div class="case-grid">{sorted.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state">No guides have been published yet.</p>}
+    </section>
   </div>
 </SiteLayout>
+<style>
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .browse-page{padding-top:40px}
+  .browse-page>.eyebrow{margin-bottom:8px}
+  .browse-page>.page-title{margin-top:0;font-size:clamp(2.2rem,4.5vw,3.6rem)}
+  .browse-page>.page-lead{margin:0 0 22px}
+  .browse-page .search-form{max-width:780px;margin:0 0 29px}
+  .browse-facets{display:grid;grid-template-columns:1fr 1fr;gap:26px;padding:21px 0 24px;border-top:1px solid #dce3e8;border-bottom:1px solid #dce3e8}
+  .browse-facet-group h2{margin:0 0 12px;color:#243540;font-size:.94rem}
+  .browse-facet-group nav{display:flex;flex-wrap:wrap;gap:8px}
+  .browse-facet-group nav a{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #dce3e8;border-radius:8px;background:white;color:#334651;font-size:.81rem;text-decoration:none;transition:border-color .15s,background .15s}
+  .browse-facet-group nav a:hover{border-color:#85c8c0;background:#f0faf8;color:#075e62}
+  .browse-facet-group nav span{display:inline-grid;min-width:19px;height:19px;place-items:center;border-radius:999px;background:#edf1f2;color:#62717a;font-size:.68rem}
+  .browse-guides{margin-top:32px}
+  .browse-guides .section-heading{align-items:end}
+  .browse-guides .section-heading .eyebrow{margin:0 0 3px;font-size:.68rem}
+  .browse-guides .section-heading h2{font-size:1.42rem}
+  .browse-guides .section-heading>span{color:#6a7982;font-size:.82rem}
+  .browse-guides .case-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+  .browse-guides .case-card{min-height:175px;padding:18px;border-radius:12px}
+  @media(max-width:700px){.browse-facets{grid-template-columns:1fr;gap:19px}.browse-guides .case-grid{grid-template-columns:1fr}}
+  @media(max-width:620px){.browse-page{padding-top:30px}.browse-page .search-form{display:grid;grid-template-columns:1fr}.browse-page .search-form button{width:100%}.browse-guides .section-heading h2{font-size:1.23rem}}
+</style>

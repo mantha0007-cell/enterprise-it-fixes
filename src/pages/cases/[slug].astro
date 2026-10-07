@@ -7,6 +7,8 @@ export async function getStaticPaths() { return (await getCollection('cases', ({
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 const meta = entry.data;
+const feedbackUrl = new URL('https://github.com/mantha0007-cell/enterprise-it-fixes/issues/new');
+feedbackUrl.searchParams.set('title', `Guide feedback: ${meta.slug}`);
 const related = (await getCollection('cases', ({data}) => data.visibility === 'published' && data.slug !== meta.slug))
   .map((candidate) => ({ entry: candidate, score: (candidate.data.product === meta.product ? 5 : 0) + (candidate.data.vendor === meta.vendor ? 2 : 0) + (candidate.data.category === meta.category ? 2 : 0) + candidate.data.tags.filter((tag) => meta.tags.includes(tag)).length }))
   .filter((candidate) => candidate.score > 0).sort((a,b) => b.score - a.score).slice(0,3).map(({entry}) => entry);
@@ -20,7 +22,7 @@ const techArticle = { '@context': 'https://schema.org', '@type': 'TechArticle', 
     <p class="page-lead">{meta.description}</p>
     <aside class="notice"><strong>Use this as a troubleshooting starting point.</strong> The checks and possible resolutions below can help investigate similar symptoms. Confirm the cause and applicability in your own environment, and consult the linked vendor documentation before making changes.</aside>
     <div class="content-layout" style="margin-top:24px">
-      <article class="article" itemprop="articleBody"><Content /></article>
+      <article class="article" itemprop="articleBody"><Content /><div class="guide-feedback"><div><strong>Found a gap or outdated step?</strong><p>Send a correction so this guide can improve.</p></div><a href={feedbackUrl.toString()} rel="external noopener noreferrer">Give feedback <span aria-hidden="true">↗</span></a></div></article>
       <aside class="case-sidebar" aria-label="Guide details">
         <div class="sidebar-box"><dl><dt>Product</dt><dd>{meta.product}</dd><dt>Vendor</dt><dd>{meta.vendor}</dd><dt>Versions</dt><dd>{meta.versions.join(', ')}</dd><dt>Category</dt><dd><a href={`/browse/categories/${meta.category.toLowerCase().replaceAll(' ','-')}/`}>{meta.category}</a></dd></dl></div>
         {meta.errorCodes.length > 0 && <div class="sidebar-box"><h2>Error codes</h2><div class="facet-list">{meta.errorCodes.map((value) => <span class="facet-chip">{value}</span>)}</div></div>}
@@ -34,3 +36,11 @@ const techArticle = { '@context': 'https://schema.org', '@type': 'TechArticle', 
     {related.length > 0 && <section class="section"><div class="section-heading"><h2>Related guides</h2></div><div class="case-grid">{related.map((item) => <CaseCard entry={item} />)}</div></section>}
   </div>
 </SiteLayout>
+<style>
+  .guide-feedback{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:40px;padding:15px 17px;border-top:1px solid #dce3e8;background:#f7faf9}
+  .guide-feedback strong{color:#1d303a;font-size:.87rem}
+  .guide-feedback p{margin:3px 0 0;color:#64747c;font-size:.8rem}
+  .guide-feedback>a{flex:0 0 auto;color:#08777d;font-size:.82rem;font-weight:700;text-decoration:none}
+  .guide-feedback>a:hover{text-decoration:underline;text-underline-offset:3px}
+  @media(max-width:620px){.guide-feedback{align-items:flex-start;flex-direction:column;gap:9px;margin-top:28px;padding:14px 0}}
+</style>
