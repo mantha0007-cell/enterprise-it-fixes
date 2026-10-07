@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "search-index": "node scripts/build-search-index.mjs"
+    "preview": "astro preview"
   },
   "dependencies": {
     "astro": "^7.3.6"
