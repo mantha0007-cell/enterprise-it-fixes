@@ -1,0 +1,10 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+---
+<SiteLayout title="About | Enterprise IT Fixes" description="How Enterprise IT Fixes documents real troubleshooting cases and verified solutions.">
+  <div class="page"><Breadcrumbs items={[{label:'About'}]} /><p class="eyebrow">About this project</p><h1 class="page-title">Useful fixes, with the evidence behind them.</h1><p class="page-lead">Enterprise IT Fixes is a small reference library for administrators who need a concrete answer to a concrete infrastructure problem.</p>
+    <div class="about-grid section"><section class="about-card"><h2>Real cases</h2><p>Published cases come from real troubleshooting work. A demo page is labeled and excluded from search indexing.</p></section><section class="about-card"><h2>Evidence before claims</h2><p>Root causes and fixes are recorded only when they were supported by evidence and verified in the described environment.</p></section><section class="about-card"><h2>Fast to the answer</h2><p>Each case starts with the short answer, then gives symptoms, environment, investigation, solution, and verification.</p></section></div>
+    <section class="info-panel"><h2>Suggest a correction</h2><p>There is no account system, comment box, newsletter, or contact form on this site. If a published technical statement needs correction, use the public repository's issue tracker.</p><a class="button" href="https://github.com/mantha0007-cell/enterprise-it-fixes/issues">Open a repository issue</a></section>
+  </div>
+</SiteLayout>

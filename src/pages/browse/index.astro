@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import { facets, slugify } from '../../lib/cases';
+const entries = await getCollection('cases', ({data}) => data.status !== 'draft');
+const groups = facets(entries);
+const sorted = [...entries].sort((a,b) => Number(a.data.verified) - Number(b.data.verified) || b.data.dateModified.valueOf() - a.data.dateModified.valueOf());
+---
+<SiteLayout title="Browse troubleshooting cases | Enterprise IT Fixes" description="Browse enterprise IT troubleshooting cases by product, vendor, category, and tag.">
+  <div class="page"><p class="eyebrow">Case library</p><h1 class="page-title">Browse troubleshooting cases</h1><p class="page-lead">Find a case by the product, vendor, category, or tag that matches your environment.</p>
+    <section class="section"><div class="section-heading"><h2>Products</h2></div><div class="facet-list">{groups.products.map((value) => <a class="facet-chip" href={`/browse/products/${slugify(value)}/`}>{value}</a>)}</div></section>
+    <section class="section"><div class="section-heading"><h2>Vendors</h2></div><div class="facet-list">{groups.vendors.map((value) => <a class="facet-chip" href={`/browse/vendors/${slugify(value)}/`}>{value}</a>)}</div></section>
+    <section class="section"><div class="section-heading"><h2>Categories</h2></div><div class="facet-list">{groups.categories.map((value) => <a class="facet-chip" href={`/browse/categories/${slugify(value)}/`}>{value}</a>)}</div></section>
+    <section class="section"><div class="section-heading"><h2>Tags</h2></div><div class="facet-list">{groups.tags.map((value) => <a class="facet-chip" href={`/browse/tags/${slugify(value)}/`}>{value}</a>)}</div></section>
+    <section class="section"><div class="section-heading"><h2>All cases ({sorted.length})</h2></div>{sorted.length ? <div class="case-grid">{sorted.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state">No cases have been published yet.</p>}</section>
+  </div>
+</SiteLayout>

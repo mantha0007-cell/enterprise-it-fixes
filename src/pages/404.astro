@@ -1,0 +1,7 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+---
+<SiteLayout title="Page not found | Enterprise IT Fixes" description="The requested page could not be found." noindex>
+  <div class="page"><p class="eyebrow">404 · Not found</p><h1 class="page-title">That case isn't here.</h1><p class="page-lead">Try searching an exact error, product, or symptom, or browse the case library.</p><form class="search-form" action="/search/" method="get" role="search"><label class="sr-only" for="notfound-search">Search cases</label><input id="notfound-search" type="search" name="q" placeholder="Search troubleshooting cases…" /><button type="submit">Search</button></form><a class="button" href="/browse/">Browse all cases</a></div>
+</SiteLayout>
+<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}</style>

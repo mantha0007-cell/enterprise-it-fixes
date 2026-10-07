@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import CaseCard from '../components/CaseCard.astro';
+const allCases = await getCollection('cases', ({ data }) => data.status !== 'draft');
+const recent = [...allCases].sort((a,b) => b.data.dateModified.valueOf() - a.data.dateModified.valueOf()).slice(0,3);
+const products = [...new Set(allCases.map(({data}) => data.product))].sort();
+const categories = [...new Set(allCases.map(({data}) => data.category))].sort();
+const vendors = [...new Set(allCases.map(({data}) => data.vendor))].sort();
+---
+<SiteLayout description="Real enterprise IT problems, evidence-based root causes, and fixes that were actually verified.">
+  <div class="page">
+    <section class="hero">
+      <p class="eyebrow">Enterprise troubleshooting notes</p>
+      <h1>Real problems.<br />Real root causes.<br /><span style="color:var(--teal)">Verified fixes.</span></h1>
+      <p class="lead">Search exact errors, event IDs, log lines, and product combinations. Each case puts the fix and the evidence up front.</p>
+      <form class="search-form" action="/search/" method="get" role="search"><label class="sr-only" for="home-search">Search cases</label><input id="home-search" type="search" name="q" placeholder="Search an error, event ID, product, or symptom…" /><button type="submit">Search cases</button></form>
+      <p class="search-hint">Search works across case titles, symptoms, products, vendors, versions, tags, error codes, event IDs, and log files.</p>
+    </section>
+    <section class="section">
+      <div class="section-heading"><h2>Recently updated cases</h2><a href="/browse/">Browse all cases →</a></div>
+      {recent.length ? <div class="case-grid">{recent.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state">The first verified case will appear here.</p>}
+    </section>
+    <section class="section split">
+      <div class="info-panel"><div class="section-heading"><h2>Browse by product</h2><a href="/browse/">All topics →</a></div><div class="facet-list">{products.map((name) => <a class="facet-chip" href={`/browse/products/${encodeURIComponent(name.toLowerCase().replaceAll(' ','-'))}/`}>{name}</a>)}</div></div>
+      <div class="info-panel"><h2>Browse by category</h2><div class="facet-list">{categories.map((name) => <a class="facet-chip" href={`/browse/categories/${encodeURIComponent(name.toLowerCase().replaceAll(' ','-'))}/`}>{name}</a>)}</div><h2 style="margin-top:24px">Vendors</h2><div class="facet-list">{vendors.map((name) => <a class="facet-chip" href={`/browse/vendors/${encodeURIComponent(name.toLowerCase().replaceAll(' ','-'))}/`}>{name}</a>)}</div></div>
+    </section>
+    <aside class="notice"><strong>Evidence first.</strong> A case is marked verified only when the root cause and fix were confirmed in the described environment. Sample pages are clearly labeled and excluded from search indexing.</aside>
+  </div>
+</SiteLayout>
+<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}</style>

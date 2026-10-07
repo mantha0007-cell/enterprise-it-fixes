@@ -1,0 +1,15 @@
+{
+  "name": "enterprise-it-fixes",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "search-index": "node scripts/build-search-index.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.3.6"
+  }
+}

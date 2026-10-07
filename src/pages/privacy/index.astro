@@ -1,0 +1,9 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+---
+<SiteLayout title="Privacy | Enterprise IT Fixes" description="Privacy information for visitors to Enterprise IT Fixes.">
+  <div class="page"><Breadcrumbs items={[{label:'Privacy'}]} /><p class="eyebrow">Privacy</p><h1 class="page-title">Privacy information</h1><p class="page-lead">This page describes the data practices of the current site implementation.</p>
+    <article class="article"><h2>Data collected by this site</h2><p>The site has no account system, contact form, newsletter, comments, or database. The search feature runs in your browser and searches the case index served with the site. It does not send search terms to a third-party search service.</p><h2>Hosting logs</h2><p>The hosting provider may process request data such as IP addresses and browser details in its server logs. The provider and retention period depend on the hosting service selected for publication. This notice must be reviewed and updated if the hosting setup changes.</p><h2>Analytics and advertising</h2><p>No analytics or advertising scripts are included in this version. If either is added later, this notice and any required consent controls must be updated before publication.</p><h2>External links</h2><p>Case pages and project pages can link to vendor documentation or GitHub. Those services apply their own privacy practices.</p><h2>Contact</h2><p>This static site has no direct contact form. Corrections can be proposed through the linked public repository issue tracker.</p></article>
+  </div>
+</SiteLayout>

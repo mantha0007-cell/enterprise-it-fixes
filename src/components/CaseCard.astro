@@ -1,0 +1,10 @@
+---
+const { entry } = Astro.props;
+const demo = entry.data.status === 'demo' || !entry.data.verified;
+---
+<a class="case-card" href={`/cases/${entry.data.slug}/`}>
+  <span class:list={['badge', demo && 'badge-demo']}>{demo ? 'DEMO · NOT A VERIFIED FIX' : 'VERIFIED FIX'}</span>
+  <h3>{entry.data.title}</h3>
+  <p>{entry.data.description}</p>
+  <span class="card-meta">{entry.data.vendor} · {entry.data.product} · Updated {entry.data.dateModified.toISOString().slice(0, 10)}</span>
+</a>

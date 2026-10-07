@@ -1,0 +1,61 @@
+---
+const {
+  title = 'Enterprise IT Fixes',
+  description = 'Real problems. Real root causes. Verified fixes.',
+  canonicalPath = Astro.url.pathname,
+  noindex = false,
+  type = 'website',
+  structuredData,
+} = Astro.props;
+const canonical = Astro.site ? new URL(canonicalPath, Astro.site).toString() : undefined;
+const robots = noindex || import.meta.env.DEV ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+const schema = structuredData ? JSON.stringify(structuredData).replaceAll('<', '\\u003c') : undefined;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Enterprise IT Fixes" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="theme-color" content="#101a24" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    {schema && <script type="application/ld+json" set:html={schema} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="Enterprise IT Fixes home"><span class="brand-mark">EF</span><span>Enterprise <b>IT Fixes</b></span></a>
+        <nav aria-label="Main navigation">
+          <a href="/browse/">Browse</a>
+          <a href="/about/">About</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="brand footer-brand" href="/"><span class="brand-mark">EF</span><span>Enterprise <b>IT Fixes</b></span></a>
+        <p>Clear notes from real troubleshooting work. Technical claims belong to their evidence.</p>
+        <nav aria-label="Footer navigation"><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/browse/">Browse cases</a></nav>
+        <small>© {new Date().getFullYear()} Enterprise IT Fixes</small>
+      </div>
+    </footer>
+  </body>
+</html>
+<style is:global>
+  :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1c2935;background:#f5f7f8;font-synthesis:none;text-rendering:optimizeLegibility;font-optical-sizing:auto;--navy:#101a24;--muted:#5e6d79;--line:#dce3e8;--teal:#087e83;--pale:#e9f5f3;--paper:#fff;--amber:#fff3d4}
+  *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;line-height:1.6}a{color:#08777d;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{color:#07575d}button,input{font:inherit}.skip-link{position:absolute;left:-999px;top:8px;background:white;padding:.75rem;z-index:5}.skip-link:focus{left:8px}.site-header{background:var(--navy);color:#f7fafc;border-bottom:1px solid #273644}.header-inner,.footer-inner{max-width:1160px;margin:auto;padding:0 24px}.header-inner{height:74px;display:flex;align-items:center;justify-content:space-between}.brand{display:inline-flex;align-items:center;gap:11px;color:#f7fafc;text-decoration:none;font-size:1.02rem;letter-spacing:.01em}.brand b{color:#8dd6ce}.brand-mark{display:grid;place-items:center;width:34px;height:34px;border:1px solid #5aa9a4;border-radius:9px;color:#b7eee6;font-size:.8rem;font-weight:800;letter-spacing:-.04em}.site-header nav,.site-footer nav{display:flex;gap:24px}.site-header nav a{color:#c8d4dc;text-decoration:none;font-size:.92rem}.site-header nav a:hover{color:white}.site-footer{background:var(--navy);color:#b8c5cd;margin-top:80px}.footer-inner{padding-top:34px;padding-bottom:30px}.footer-inner p{max-width:540px;font-size:.9rem}.site-footer nav{margin:20px 0}.site-footer nav a{color:#c8d4dc;font-size:.9rem;text-decoration:none}.site-footer small{color:#8d9da8}.page{max-width:1160px;margin:auto;padding:48px 24px 20px}.eyebrow{color:var(--teal);font-size:.76rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.hero{padding:62px 0 40px;max-width:810px}.hero h1{font-size:clamp(2.4rem,5vw,4rem);line-height:1.08;letter-spacing:-.055em;color:var(--navy);margin:.35rem 0 1rem}.hero .lead{font-size:1.18rem;color:#51616d;max-width:680px}.search-form{display:flex;max-width:760px;margin:28px 0 16px;border:1px solid #cbd6dc;border-radius:11px;background:white;padding:6px;box-shadow:0 6px 22px #182c3510}.search-form input{flex:1;min-width:0;border:0;outline:0;padding:13px 14px;color:var(--navy);background:transparent}.search-form button,.button{border:0;background:var(--teal);color:white;border-radius:7px;padding:12px 19px;font-weight:700;text-decoration:none;cursor:pointer}.search-form button:hover,.button:hover{background:#06686d;color:white}.search-hint{font-size:.84rem;color:var(--muted)}.section{margin:42px 0}.section-heading{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:16px}.section-heading h2{font-size:1.42rem;letter-spacing:-.025em;margin:0;color:var(--navy)}.section-heading a{font-size:.9rem}.case-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.case-card{display:flex;flex-direction:column;gap:10px;min-height:220px;padding:21px;background:var(--paper);border:1px solid var(--line);border-radius:12px;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s,box-shadow .15s}.case-card:hover{transform:translateY(-2px);border-color:#8fcac4;box-shadow:0 12px 28px #1f39410d;color:inherit}.case-card h3{font-size:1.14rem;line-height:1.35;margin:0;color:var(--navy)}.case-card p{margin:0;color:var(--muted);font-size:.92rem}.case-card .card-meta{margin-top:auto;color:#63737d;font-size:.77rem}.badge{display:inline-flex;align-items:center;gap:6px;width:max-content;background:var(--pale);color:#086b6e;border-radius:20px;padding:4px 9px;font-size:.72rem;font-weight:800;letter-spacing:.03em}.badge-demo{background:var(--amber);color:#805500}.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}.facet-list{display:flex;flex-wrap:wrap;gap:9px}.facet-chip{display:inline-flex;align-items:center;background:white;border:1px solid var(--line);border-radius:999px;padding:7px 12px;text-decoration:none;color:#31424e;font-size:.87rem}.facet-chip:hover{border-color:#7dbbb5;background:#f2faf8}.split{display:grid;grid-template-columns:1.15fr .85fr;gap:24px}.info-panel{border:1px solid var(--line);background:white;border-radius:12px;padding:22px}.info-panel h2,.info-panel h3{margin-top:0;color:var(--navy)}.page-title{max-width:800px;margin:12px 0 12px;color:var(--navy);font-size:clamp(2rem,4vw,3.3rem);line-height:1.12;letter-spacing:-.045em}.page-lead{max-width:760px;color:var(--muted);font-size:1.08rem}.breadcrumbs{display:flex;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:.85rem;margin-bottom:22px}.breadcrumbs span::before{content:"/";margin-right:8px;color:#a2afb6}.content-layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:48px;align-items:start}.article{background:white;border:1px solid var(--line);border-radius:12px;padding:clamp(22px,4vw,42px);min-width:0}.article h2{font-size:1.35rem;letter-spacing:-.025em;color:var(--navy);margin:2.2em 0 .7em}.article h2:first-child{margin-top:0}.article h3{font-size:1.08rem;color:var(--navy);margin-top:1.8em}.article p,.article li{color:#34434e}.article blockquote{margin:0 0 24px;padding:14px 18px;border-left:4px solid #d49a19;background:#fff8e6;color:#65501f}.article code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#eef2f4;border-radius:4px;padding:.1em .3em;font-size:.9em}.article pre{overflow:auto;background:#101a24;color:#e8f0f4;padding:16px;border-radius:8px}.article pre code{background:transparent;padding:0;color:inherit}.article table{display:block;overflow:auto;border-collapse:collapse}.article th,.article td{border:1px solid var(--line);padding:8px 11px;text-align:left}.case-sidebar{position:sticky;top:20px}.sidebar-box{background:white;border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}.sidebar-box h2{font-size:.92rem;color:var(--navy);margin:0 0 10px}.sidebar-box dl{margin:0}.sidebar-box dt{font-size:.73rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:12px}.sidebar-box dd{margin:2px 0 0;font-size:.88rem;color:#263742}.sidebar-box .facet-list{gap:6px}.sidebar-box .facet-chip{font-size:.75rem;padding:4px 8px}.verified-note{font-size:.83rem;color:var(--muted)}.list-stack{display:grid;gap:12px}.empty-state{border:1px dashed #bdcbd2;background:white;border-radius:12px;padding:24px;color:var(--muted)}.search-results{display:grid;gap:12px;margin-top:22px}.search-status{color:var(--muted);font-size:.9rem}.about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.about-card{border:1px solid var(--line);background:white;border-radius:12px;padding:20px}.about-card h2{font-size:1.05rem;color:var(--navy);margin-top:0}.checklist{padding-left:1.2rem}.checklist li{margin:.6rem 0}.notice{background:#eef6f5;border:1px solid #cde4e1;border-radius:10px;padding:16px 18px;color:#365451}.demo-notice{background:#fff7e5;border-color:#f0d590;color:#73510d}.search-result-card{display:block;background:white;border:1px solid var(--line);border-radius:10px;padding:17px 19px;text-decoration:none}.search-result-card h2{font-size:1.05rem;line-height:1.35;margin:0 0 5px;color:var(--navy)}.search-result-card p{margin:0;color:var(--muted);font-size:.9rem}.search-result-card:hover{border-color:#8fcac4}.search-result-card small{display:block;color:#74828a;margin-top:7px}
+  @media(max-width:850px){.case-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.content-layout{grid-template-columns:minmax(0,1fr) 220px;gap:22px}.about-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:620px){.header-inner,.footer-inner{padding-left:18px;padding-right:18px}.page{padding:34px 18px 10px}.hero{padding:38px 0 28px}.hero h1{font-size:2.55rem}.hero .lead{font-size:1.05rem}.search-form{display:grid;grid-template-columns:1fr}.search-form button{width:100%}.case-grid,.split,.about-grid{grid-template-columns:1fr}.case-card{min-height:180px}.content-layout{grid-template-columns:1fr}.case-sidebar{position:static;grid-row:1}.site-header nav{gap:14px}.brand{font-size:.91rem}.brand-mark{width:31px;height:31px}.section-heading{align-items:flex-start}.article{padding:22px 18px}.case-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sidebar-box{margin:0}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+</style>
