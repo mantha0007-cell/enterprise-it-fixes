@@ -6,7 +6,7 @@ An English-language library of real enterprise IT troubleshooting cases. The sit
 
 The initial site source is an Astro static site. Its only case is an explicitly marked demo with no technical diagnosis or fix. The demo is excluded from search indexing and the internal search index. No analytics or advertising code is included.
 
-GitHub Pages is not configured. GitHub's current terms say Pages is intended for static project showcases and is not permitted as free hosting for an online business. Because this project may later use advertising as a revenue model, select a suitable host before deploying it. See [GitHub's Pages terms](https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features#pages).
+The site is published on [Cloudflare Pages](https://enterprise-it-fixes.pages.dev/). Cloudflare builds the `main` branch from the GitHub repository with the Astro preset, `pnpm build`, and `dist` as the output directory. The `SITE_URL` build variable is set to the production URL so canonical links and the sitemap use the public origin. The Cloudflare GitHub App is restricted to this repository.
 
 ## Add a case
 
@@ -55,7 +55,7 @@ For a production build, set `SITE_URL` to the exact public origin first. This se
 
 ## Deploy
 
-Choose and configure a host before deployment. Connect the repository to the selected static host, set the build command to `pnpm build`, and publish the `dist/` directory. Configure `SITE_URL` to the final HTTPS URL in that host's build settings. A `main` branch push can then trigger a rebuild through the host's Git integration.
+Cloudflare Pages deploys automatically when `main` changes. For another host, use `pnpm build`, publish `dist/`, and set `SITE_URL` to that host's final HTTPS origin.
 
 ## Search, SEO, and structured data
 
