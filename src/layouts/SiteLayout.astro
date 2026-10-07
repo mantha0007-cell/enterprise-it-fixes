@@ -8,7 +8,6 @@ const {
   structuredData,
 } = Astro.props;
 const canonical = Astro.site ? new URL(canonicalPath, Astro.site).toString() : undefined;
-const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || '';
 const robots = noindex || import.meta.env.DEV ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
 const schema = structuredData ? JSON.stringify(structuredData).replaceAll('<', '\\u003c') : undefined;
 ---
@@ -47,15 +46,10 @@ const schema = structuredData ? JSON.stringify(structuredData).replaceAll('<', '
       <div class="footer-inner">
         <a class="brand footer-brand" href="/"><span class="brand-mark">EF</span><span>Enterprise <b>IT Fixes</b></span></a>
         <p>Source-backed guides and field-verified fixes for enterprise IT.</p>
-        <nav aria-label="Footer navigation"><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/browse/">Browse cases</a>{/^G-[A-Z0-9]+$/.test(gaMeasurementId) && <button class="privacy-choice-link" type="button" data-consent-open>Privacy choices</button>}</nav>
+        <nav aria-label="Footer navigation"><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/browse/">Browse cases</a></nav>
         <small>© {new Date().getFullYear()} Enterprise IT Fixes</small>
       </div>
     </footer>
-    <section class="consent-panel" data-consent-panel data-ga-id={gaMeasurementId} hidden aria-labelledby="consent-title" role="dialog" aria-modal="false">
-      <div class="consent-copy"><strong id="consent-title">Your privacy choices</strong><p>Google Analytics will be used only if you allow analytics. You can change this choice at any time. Essential site functions work without analytics.</p></div>
-      <div class="consent-actions"><button type="button" data-consent-reject>Reject analytics</button><button type="button" data-consent-accept>Allow analytics</button></div>
-    </section>
-    <script is:inline src="/consent.js"></script>
   </body>
 </html>
 <style is:global>
