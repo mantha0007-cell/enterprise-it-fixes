@@ -1,10 +1,9 @@
 ---
-title: 'Windows Update 0x800f081f: repair a missing component-store source'
+title: 'Windows Update 0x800f081f: find a matching component-store repair source'
 slug: windows-update-0x800f081f
 description: '0x800f081f means CBS could not find a repair source; run DISM, then SFC, and check source matching if repair still fails.'
 datePublished: 2026-10-07
 dateModified: 2026-10-07
-lastReviewed: 2026-10-07
 product: 'Windows Update and Component-Based Servicing'
 vendor: 'Microsoft'
 versions: ['Supported Windows client and Server versions; see linked Microsoft applicability']
@@ -14,8 +13,8 @@ errorCodes: ['0x800f081f', 'CBS_E_SOURCE_MISSING']
 eventIds: []
 logFiles: ['%windir%\\Logs\\CBS\\CBS.log', '%windir%\\Logs\\DISM\\dism.log']
 symptoms: ['The source files could not be found', 'ResolveSource() unsuccessful', 'A Windows update or feature repair fails']
-status: documented
-verified: false
+visibility: published
+
 sources:
   - label: 'Microsoft: common Windows Update errors'
     url: 'https://learn.microsoft.com/en-us/troubleshoot/windows-client/installing-updates-features-roles/common-windows-update-errors'
@@ -27,7 +26,6 @@ sources:
 
 0x800f081f is CBS_E_SOURCE_MISSING: servicing could not find a required package or repair file. On an affected, elevated device, run DISM component-store repair and then System File Checker. If DISM cannot reach a usable repair source, provide installation media that matches the target Windows release, edition, language, and servicing level; a mismatched image can leave the error unresolved.
 
-This is a source-documented guide, not a repair tested by this site.
 
 ## Problem / symptoms
 
@@ -48,8 +46,7 @@ Microsoft describes the code as a missing source for a package or file and recom
 3. Confirm the device can use its configured repair source. Managed devices may be directed to WSUS or another source by policy.
 4. If using installation media, check that the image contains the exact edition and a compatible servicing level. Identify the correct image index instead of assuming index 1.
 
-## Root cause
-
+## Likely causes
 The component store repair operation cannot obtain one or more required files from its configured source. Corruption may be involved, but an unavailable or unsuitable source can produce the same code.
 
 ## Solution
@@ -61,8 +58,7 @@ From an elevated Command Prompt, run the vendor-recommended repair sequence:
 
 Restart if requested, then retry the failed update. By default, DISM may use Windows Update as its repair source. Where that source is unavailable, follow Microsoft's Windows image repair guidance to specify a matching local or network source and the correct WIM/ESD index. Do not guess an index or use media from a different release.
 
-## Verification
-
+## How to check the result
 - Confirm DISM completes successfully and record its exit/result details.
 - Confirm SFC completes and reports whether it repaired files or found no integrity violations.
 - Retry the same update or feature and check CBS.log for the original source-missing failure.

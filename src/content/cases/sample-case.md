@@ -1,10 +1,9 @@
 ---
-title: "Sample case: documenting a verified enterprise IT fix"
+title: "Sample troubleshooting guide template"
 slug: sample-case
-description: "A clearly marked demo showing the case layout. It contains no real incident, root cause, or technical fix."
+description: "A private template showing how to structure an original enterprise IT troubleshooting guide."
 datePublished: 2026-10-07
 dateModified: 2026-10-07
-lastVerified: 2026-10-07
 product: "Sample product"
 vendor: "Sample vendor"
 versions: ["Demo only"]
@@ -13,16 +12,16 @@ tags: ["sample", "case-template"]
 errorCodes: []
 eventIds: []
 logFiles: []
-symptoms: ["This page demonstrates the publishing structure only."]
-status: demo
-verified: false
+symptoms: ["Template content only."]
+visibility: demo
+
 ---
 
-> **Demo only.** This example is not a real troubleshooting incident. It contains no diagnosis, commands, or fix. Do not use it to solve a technical problem.
+> **Template only.** Replace this sample with an original guide about a specific error, product, or symptom before publication.
 
 ## Short answer
 
-Replace this section only after a real issue has been investigated and its fix has been verified. This demo intentionally makes no technical claim.
+Summarize what the error or symptom generally indicates and give the reader a clear first diagnostic step. Avoid claiming a particular cause without evidence.
 
 ## Problem / Symptoms
 
@@ -38,27 +37,25 @@ Add only the product, vendor, versions, and configuration details needed to unde
 
 ## What worked / what did not work
 
-Record each relevant test and its observed result. Do not present an untested suggestion as a working fix.
+List the checks that help distinguish likely causes. Phrase proposed actions as guidance and link the sources that support them.
 
 ## Investigation
 
-Add the evidence that connects the symptoms to the eventual cause. Cite public vendor documentation where it supports a technical claim.
+Explain how the reader can use logs, settings, or vendor documentation to narrow down the cause.
 
-## Root cause
+## Likely causes
+Describe likely causes supported by the linked sources and explain how to distinguish them.
 
-Not provided. A real case needs evidence that supports the stated cause.
+## Suggested troubleshooting steps
 
-## Solution
-
-Not provided. Replace this demo with the exact change that resolved the real issue.
+Describe safe next steps that may address the issue when the matching cause is found.
 
 ## Commands / configuration
 
 No commands are included. Add only reviewed commands, with secrets and environment-specific values removed.
 
-## Verification
-
-Describe how the same failure condition was tested again and what confirmed the result.
+## Check the result
+Explain what a reader can inspect after following a step, and what a different result may indicate.
 
 ## Related cases
 

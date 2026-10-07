@@ -4,7 +4,6 @@ slug: "intune-uwp-0x87d1041c-system-context"
 description: "Understand Intune error 0x87D1041C for a Microsoft Store UWP app already installed for a user when deployment runs in System context."
 datePublished: 2026-10-07
 dateModified: 2026-10-07
-lastReviewed: 2026-10-07
 product: "Microsoft Intune"
 vendor: "Microsoft"
 versions: ["Microsoft Intune", "Windows 10 and Windows 11; behavior depends on package"]
@@ -14,8 +13,8 @@ errorCodes: ["0x87D1041C"]
 eventIds: []
 logFiles: ["Intune Management Extension logs", "Company Portal app status"]
 symptoms: ["Intune reports that the application was not detected after installation.", "The Store app is visible or launchable for a user despite a failed status."]
-status: "documented"
-verified: false
+visibility: published
+
 sources:
   - label: "Microsoft: Add Microsoft Store apps in Intune"
     url: "https://learn.microsoft.com/en-us/intune/app-management/deployment/add-microsoft-store"
@@ -48,18 +47,15 @@ Microsoft Store app (new) deployments in Intune, especially UWP apps with user-s
 4. Review the app’s Intune status and relevant management logs for the same timestamp.
 5. Check the linked Microsoft article for the current limitations and behavior of that Store app deployment type.
 
-## Likely root cause
-
+## Likely causes
 Microsoft documents a case where an app already installed for any user can cause a System-context deployment to report `0x87D1041C`. The code is a detection result; on its own, it does not distinguish this context issue from a genuine installation or detection problem.
 
-## Remediation
-
+## Suggested troubleshooting steps
 Choose a deployment context that matches the app’s supported installation scope and the organization’s assignment design. If the app is intentionally user-scoped, use an appropriate user-targeted deployment where supported. If device-wide installation is required, verify the package supports it and test the behavior on a clean, representative device before changing a broad assignment.
 
 Do not uninstall the app for every user or alter detection rules solely because this code appeared. First verify package-specific Microsoft guidance and the device’s actual app registration.
 
-## Verification
-
+## How to check the result
 On a controlled test device, use the intended assignment and context. Confirm installation scope, launchability for the intended user, and the resulting Intune status after the next reporting cycle. Compare with a clean device if the app pre-existed.
 
 ## Version notes
@@ -69,7 +65,3 @@ Store package behavior and Intune options evolve. Confirm current app-type suppo
 ## Sources
 
 - [Microsoft: Add Microsoft Store apps in Intune](https://learn.microsoft.com/en-us/intune/app-management/deployment/add-microsoft-store)
-
-## Evidence status
-
-This is an original guide based on linked Microsoft documentation. It is not a report of a field investigation or a device-specific test.

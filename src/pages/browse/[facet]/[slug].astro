@@ -6,7 +6,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import { facets, slugify } from '../../../lib/cases';
 const titles: Record<string,string> = { categories:'Category', products:'Product', vendors:'Vendor', tags:'Tag' };
 export async function getStaticPaths() {
-const entries = await getCollection('cases', ({data}) => ['verified', 'documented'].includes(data.status));
+const entries = await getCollection('cases', ({data}) => data.visibility === 'published');
   const f = facets(entries);
   return Object.entries(f).flatMap(([facet, values]) => values.map((name) => {
     const slug = slugify(name);
@@ -15,11 +15,11 @@ const entries = await getCollection('cases', ({data}) => ['verified', 'documente
   }));
 }
 const { name, facet, entries } = Astro.props;
-const sorted = [...entries].sort((a,b) => Number(a.data.verified) - Number(b.data.verified) || b.data.dateModified.valueOf() - a.data.dateModified.valueOf());
-const title = `${name} troubleshooting cases | Enterprise IT Fixes`;
+const sorted = [...entries].sort((a,b) => b.data.dateModified.valueOf() - a.data.dateModified.valueOf());
+const title = `${name} troubleshooting guides | Enterprise IT Fixes`;
 ---
-<SiteLayout title={title} description={`Enterprise IT troubleshooting cases tagged ${name}.`} structuredData={{'@context':'https://schema.org','@type':'CollectionPage',name,description:`Enterprise IT troubleshooting cases for ${name}.`,...(Astro.site?{url:new URL(Astro.url.pathname,Astro.site).toString()}:{})}}>
-  <div class="page"><Breadcrumbs items={[{label:'Browse',href:'/browse/'},{label:titles[facet],href:'/browse/'},{label:name}]} /><p class="eyebrow">{titles[facet]}</p><h1 class="page-title">{name}</h1><p class="page-lead">Troubleshooting cases associated with {name}.</p>
-    {sorted.length ? <div class="case-grid section">{sorted.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state section">No cases are listed here yet.</p>}
+<SiteLayout title={title} description={`Enterprise IT troubleshooting guides tagged ${name}.`} structuredData={{'@context':'https://schema.org','@type':'CollectionPage',name,description:`Enterprise IT troubleshooting guides for ${name}.`,...(Astro.site?{url:new URL(Astro.url.pathname,Astro.site).toString()}:{})}}>
+  <div class="page"><Breadcrumbs items={[{label:'Browse',href:'/browse/'},{label:titles[facet],href:'/browse/'},{label:name}]} /><p class="eyebrow">{titles[facet]}</p><h1 class="page-title">{name}</h1><p class="page-lead">Troubleshooting guides associated with {name}.</p>
+    {sorted.length ? <div class="case-grid section">{sorted.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state section">No guides are listed here yet.</p>}
   </div>
 </SiteLayout>

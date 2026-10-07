@@ -2,22 +2,22 @@
 
 Complete this review before publishing a page to the public repository.
 
-## Evidence and technical accuracy
+## Technical accuracy and sources
 
-- [ ] The evidence label matches the page: documented guide or field-verified fix.
-- [ ] A documented guide links primary vendor material, uses original wording, and does not claim an incident was investigated or tested here.
-- [ ] A field-verified fix describes a real issue investigated in the stated environment.
-- [ ] Exact symptoms, error codes, event IDs, versions, and environment are supported by evidence or cited vendor documentation.
-- [ ] A field-verified fix has evidence for its root cause, the applied change, and a successful retest.
-- [ ] Commands and configuration snippets were reviewed for accuracy and operational safety.
-- [ ] Vendor sources support the linked claims and are relevant to the stated product/version.
-- [ ] The short answer explains scope and does not overstate applicability.
-- [ ] Version and review dates are accurate; lastVerified is set only after a real retest.
+- [ ] Exact symptoms, error codes, event IDs, versions, and environment details are supported by cited sources.
+- [ ] The article distinguishes source-supported behavior from likely causes that still need checking in a reader's environment.
+- [ ] The page presents general troubleshooting guidance and does not imply that this site investigated a specific customer incident or applied a fix there.
+- [ ] Vendor sources directly support the linked claims and apply to the stated product/version.
+- [ ] Commands and configuration snippets were checked for accuracy and operational safety.
+- [ ] Suggested changes are scoped, explain relevant risks, and direct readers to vendor documentation where appropriate.
+- [ ] The short answer explains the symptom and scope without promising a universal fix.
+- [ ] The article uses original wording. Only short exact error text needed to identify a problem is reproduced; vendor text, screenshots, and diagrams are not copied.
+- [ ] Publication and update dates are accurate.
 
 ## Privacy and security
 
 - [ ] Company, customer, tenant, and internal domain names were removed or replaced.
-- [ ] Usernames, e-mail addresses, hostnames, tenant IDs, subscription IDs, serial numbers, and device identifiers were removed.
+- [ ] Usernames, e-mail addresses, hostnames, tenant GUIDs, subscription IDs, serial numbers, and device identifiers were removed.
 - [ ] IP addresses were checked and replaced where disclosure is not appropriate.
 - [ ] No passwords, tokens, API keys, private keys, or confidential certificate information remain.
 - [ ] Screenshots and logs were reviewed for hidden or cropped identifiers.
@@ -27,7 +27,7 @@ Complete this review before publishing a page to the public repository.
 
 ## Publication
 
-- [ ] Frontmatter is complete and the dates reflect publication or review accurately.
-- [ ] Demo or draft warnings appear only on intentionally private/non-indexed content.
+- [ ] Frontmatter is complete and dates reflect publication or content updates accurately.
+- [ ] Demo or draft content is excluded from public routes, search, browsing, and the sitemap.
 - [ ] Links work and the page is readable on a narrow screen.
 - [ ] The public diff was reviewed before commit or push.

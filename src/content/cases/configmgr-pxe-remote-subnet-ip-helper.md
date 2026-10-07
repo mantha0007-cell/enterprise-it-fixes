@@ -4,7 +4,6 @@ slug: "configmgr-pxe-remote-subnet-ip-helper"
 description: "Troubleshoot Configuration Manager PXE clients on a remote VLAN with packet forwarding, DHCP, distribution point, and SMSPXE.log checks."
 datePublished: 2026-10-07
 dateModified: 2026-10-07
-lastReviewed: 2026-10-07
 product: "Microsoft Configuration Manager"
 vendor: "Microsoft"
 versions: ["Microsoft Configuration Manager current branch"]
@@ -14,8 +13,8 @@ errorCodes: []
 eventIds: []
 logFiles: ["SMSPXE.log", "DHCP server logs"]
 symptoms: ["PXE works on the distribution point VLAN but not on a remote subnet.", "Clients fail to discover a PXE-enabled distribution point."]
-status: "documented"
-verified: false
+visibility: published
+
 sources:
   - label: "Microsoft: Troubleshoot PXE boot issues in Configuration Manager"
     url: "https://learn.microsoft.com/en-us/troubleshoot/mem/configmgr/os-deployment/troubleshoot-pxe-boot-issues"
@@ -47,18 +46,15 @@ Microsoft Configuration Manager current branch, PXE-enabled distribution point, 
 5. If possible, capture DHCP/PXE traffic on both sides of the routed boundary and verify the helper forwards it to the intended servers.
 6. Confirm the target distribution point is PXE-enabled and its boot images are distributed.
 
-## Likely root cause
-
+## Likely causes
 The router does not forward the PXE discovery traffic from the client subnet to the relevant services, or forwards it to an incomplete/wrong destination. DHCP options 60, 66, and 67 are not the general substitute for correctly configured IP helpers in this Configuration Manager design. Microsoft notes a narrow option 60 exception when DHCP and Windows Deployment Services run on the same server; verify current vendor guidance for the actual topology.
 
-## Remediation
-
+## Suggested troubleshooting steps
 Coordinate with the network owner to configure the router’s IP helper addresses for the DHCP service and PXE-enabled distribution point required by the design. Avoid blanket changes to DHCP options 66/67; incorrect boot server or filename values can break clients and may not support the Configuration Manager scenario.
 
 Recheck the PXE-enabled distribution point, boundary groups, boot image distribution, and network ACLs only after proving the request reaches the expected endpoint.
 
-## Verification
-
+## How to check the result
 Repeat the controlled test from the remote VLAN. Verify DHCP assignment, PXE request arrival in `SMSPXE.log`, boot image selection, and progression to the task-sequence wizard. Test another representative subnet before broad deployment.
 
 ## Version notes
@@ -68,7 +64,3 @@ The networking principle applies across Configuration Manager current branch rel
 ## Sources
 
 - [Microsoft: Troubleshoot PXE boot issues in Configuration Manager](https://learn.microsoft.com/en-us/troubleshoot/mem/configmgr/os-deployment/troubleshoot-pxe-boot-issues)
-
-## Evidence status
-
-This is an original guide based on linked Microsoft documentation. It is not a report of a field investigation or a validated network change.

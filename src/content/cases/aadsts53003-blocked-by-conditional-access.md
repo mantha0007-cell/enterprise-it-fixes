@@ -4,7 +4,6 @@ slug: aadsts53003-blocked-by-conditional-access
 description: 'AADSTS53003 means Conditional Access blocked the request; use the matching sign-in event to identify the policy and unmet condition before changing access.'
 datePublished: 2026-10-07
 dateModified: 2026-10-07
-lastReviewed: 2026-10-07
 product: 'Microsoft Entra ID'
 vendor: 'Microsoft'
 versions: ['Microsoft Entra Conditional Access; policy results depend on tenant configuration and sign-in context']
@@ -14,8 +13,8 @@ errorCodes: ['AADSTS53003', '53003']
 eventIds: []
 logFiles: ['Microsoft Entra sign-in logs', 'Microsoft Entra audit logs']
 symptoms: ['Access has been blocked by Conditional Access policies', 'Sign-in failure shows Conditional Access status failure']
-status: documented
-verified: false
+visibility: published
+
 sources:
   - label: 'Microsoft: troubleshoot Conditional Access sign-in problems'
     url: 'https://learn.microsoft.com/en-us/entra/identity/conditional-access/troubleshoot-conditional-access'
@@ -31,7 +30,6 @@ sources:
 
 AADSTS53003 means Microsoft Entra Conditional Access blocked the sign-in request. The code does not identify which policy or condition caused the block. Find the matching failed sign-in event and open its **Conditional Access** tab to see the policy results; inspect device, client app, location, user, resource, and authentication details to understand the failed condition. Correct the condition or assignment only if the policy result conflicts with the organization's intended access rule. Do not disable Conditional Access as a generic fix.
 
-This is a source-documented guide, not an access issue investigated or reproduced by this site.
 
 ## Problem / symptoms
 
@@ -39,7 +37,7 @@ A user is authenticated or reaches a Microsoft sign-in page, but access to the t
 
 ## Exact error
 
-> AADSTS53003: BlockedByConditionalAccess — access has been blocked by Conditional Access policies.
+> AADSTS53003: Conditional Access denied this sign-in request.
 
 The error identifies the policy family, not the individual policy or failed requirement. Do not infer from this code alone that the device is noncompliant, the user is outside a trusted location, or MFA is missing.
 
@@ -60,18 +58,15 @@ Microsoft maps 53003 to a Conditional Access block. The sign-in event's Conditio
 5. If the event does not make the policy outcome clear, run the sign-in diagnostic or use the Conditional Access **What If** tool with the same user, app/resource, and sign-in conditions. What If is a simulation; confirm the result against the actual event.
 6. If the user is fully locked out, involve another authorized administrator or Microsoft support rather than attempting blind policy changes.
 
-## Root cause
-
+## Likely causes
 One or more Conditional Access policies evaluated the sign-in and denied access because its assignments, conditions, or grant controls did not produce an allowed outcome. The exact policy and signal are specific to the event; the code alone is insufficient to name the cause.
 
-## Resolution
-
+## Suggested troubleshooting steps
 If the block is expected, have the user meet the requirement through an approved account, device, client, location, or authentication method. If the result is unintended, adjust only the specific policy assignment, condition, or grant control that the event shows is wrong, and preserve the organization's security objective. Test the changed rule in a controlled scope or report-only mode when appropriate before broad enforcement. Check service dependencies when a different resource than expected is blocked.
 
 Do not broadly exclude the user or app, set assignment or policy controls to allow everyone, or turn off MFA to make one sign-in succeed without approval from the policy owner.
 
-## Verification
-
+## How to check the result
 - Repeat the same user and resource sign-in under the relevant conditions.
 - Confirm the new event shows the intended Conditional Access policy outcome and expected resource.
 - Test an in-scope and out-of-scope account or device to confirm the policy still protects the intended population.

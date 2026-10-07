@@ -1,10 +1,9 @@
 ---
-title: 'AADSTS50011: fix a Microsoft Entra redirect URI mismatch'
+title: 'AADSTS50011: troubleshoot a Microsoft Entra redirect URI mismatch'
 slug: aadsts50011-redirect-uri-mismatch
 description: 'Compare the redirect_uri in the failed sign-in request with the app registration, then correct the side that is wrong.'
 datePublished: 2026-10-07
 dateModified: 2026-10-07
-lastReviewed: 2026-10-07
 product: 'Microsoft Entra ID'
 vendor: 'Microsoft'
 versions: ['Microsoft identity platform; OIDC and OAuth 2.0 applications']
@@ -14,8 +13,8 @@ errorCodes: ['AADSTS50011']
 eventIds: []
 logFiles: ['Microsoft Entra sign-in logs']
 symptoms: ['The redirect URI specified in the request does not match the redirect URIs configured for the application.']
-status: documented
-verified: false
+visibility: published
+
 sources:
   - label: 'Microsoft: AADSTS50011 troubleshooting'
     url: 'https://learn.microsoft.com/en-us/troubleshoot/entra/entra-id/app-integration/error-code-AADSTS50011-redirect-uri-mismatch'
@@ -37,7 +36,7 @@ Users reach Microsoft Entra sign-in and then get rejected before returning to th
 
 ## Exact error
 
-> AADSTS50011: The redirect URI specified in the request does not match the redirect URIs configured for the application.
+> AADSTS50011: redirect URI mismatch.
 
 The full message may include the URI and app ID. Treat tenant-specific values as sensitive when sharing logs.
 
@@ -56,18 +55,15 @@ Entra compares the callback URI sent by the application with the redirect URIs r
 3. Compare the full URI, including scheme, host, port, path, and trailing slash where applicable. Check production and local-development callbacks separately.
 4. If the URI in the request is unexpected, inspect the app's base URL, proxy headers, callback setting, and environment-specific configuration. Do not “fix” an incorrect callback by registering it blindly.
 
-## Root cause
-
+## Likely causes
 The callback configured in the application and the callback allow-list in its Entra registration do not agree. Common sources of drift include a changed hostname, reverse-proxy scheme, port, path, or deployment environment. The exact difference must be read from the failing request; the error code alone does not say which side is wrong.
 
-## Resolution
-
+## Suggested troubleshooting steps
 Update the application to send its intended callback, or add that exact intended callback to the matching app registration under the right platform. Save the registration and allow several minutes for the change to take effect before retesting.
 
 Avoid wildcard callbacks and do not expose development callbacks in a production registration without a reason. Microsoft recommends exact, controlled URIs because authorization responses can contain security tokens.
 
-## Verification
-
+## How to check the result
 - Retry the same sign-in flow after the configuration has propagated.
 - Confirm the request now contains the expected callback and Entra returns the response to the intended application endpoint.
 - Check the new sign-in event; preserve the correlation ID if the failure remains.

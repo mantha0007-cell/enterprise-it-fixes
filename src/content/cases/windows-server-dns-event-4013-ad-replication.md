@@ -4,7 +4,6 @@ slug: "windows-server-dns-event-4013-ad-replication"
 description: "Diagnose DNS Server Event ID 4013 by checking AD DS initial synchronization, replication, DC discovery, and DNS startup dependencies."
 datePublished: 2026-10-07
 dateModified: 2026-10-07
-lastReviewed: 2026-10-07
 product: "Windows Server DNS Server"
 vendor: "Microsoft"
 versions: ["Windows Server; verify the current article applies to your version"]
@@ -14,8 +13,8 @@ errorCodes: []
 eventIds: ["4013"]
 logFiles: ["DNS Server event log", "Directory Service event log", "System event log"]
 symptoms: ["DNS Server logs Event ID 4013 after startup.", "AD-integrated DNS zones are delayed or unavailable while a domain controller starts."]
-status: "documented"
-verified: false
+visibility: published
+
 sources:
   - label: "Microsoft: Troubleshoot DNS Event ID 4013"
     url: "https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/troubleshoot-dns-event-id-4013"
@@ -56,18 +55,15 @@ repadmin /showrepl
 
 Review output locally and redact domain names, server names, and IP addresses before sharing.
 
-## Likely cause
-
+## Likely causes
 DNS is waiting for AD DS initial synchronization, or the DC cannot complete the expected synchronization because a replication partner or required DNS record is unavailable. Event 4013 is a startup symptom; use the surrounding directory and DNS evidence to identify the cause.
 
-## Remediation
-
+## Suggested troubleshooting steps
 Restore reliable DNS resolution and AD replication between healthy domain controllers. Correct DNS client configuration, replication connectivity, stale references, or startup sequencing only where the collected evidence supports it. Avoid rebooting all DCs together; preserve a reachable, healthy DNS/DC path during recovery.
 
 Do not set `Repl Perform Initial Synchronizations` to `0` as a standing production fix. Microsoft warns this can cause lingering objects and is not recommended for production environments. Use only a vendor-supported, temporary recovery procedure when directed by Microsoft support and with a rollback plan.
 
-## Verification
-
+## How to check the result
 Confirm AD replication converges, the DC advertises and resolves required domain records, AD-integrated zones load, and DNS clients resolve representative records. Monitor after a controlled restart if startup behavior was part of the incident.
 
 ## Version notes
@@ -77,7 +73,3 @@ Check the linked Microsoft article against the specific Windows Server versions 
 ## Sources
 
 - [Microsoft: Troubleshoot DNS Event ID 4013](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/troubleshoot-dns-event-id-4013)
-
-## Evidence status
-
-This is an original guide based on linked Microsoft documentation. It is not a report of a field investigation or a domain-controller change tested in production.

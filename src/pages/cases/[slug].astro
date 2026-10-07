@@ -3,36 +3,34 @@ import { getCollection, render } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import CaseCard from '../../components/CaseCard.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-export async function getStaticPaths() { return (await getCollection('cases', ({data}) => ['verified', 'documented'].includes(data.status))).map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } })); }
+export async function getStaticPaths() { return (await getCollection('cases', ({data}) => data.visibility === 'published')).map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } })); }
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 const meta = entry.data;
-const related = (await getCollection('cases', ({data}) => ['verified', 'documented'].includes(data.status) && data.slug !== meta.slug))
+const related = (await getCollection('cases', ({data}) => data.visibility === 'published' && data.slug !== meta.slug))
   .map((candidate) => ({ entry: candidate, score: (candidate.data.product === meta.product ? 5 : 0) + (candidate.data.vendor === meta.vendor ? 2 : 0) + (candidate.data.category === meta.category ? 2 : 0) + candidate.data.tags.filter((tag) => meta.tags.includes(tag)).length }))
   .filter((candidate) => candidate.score > 0).sort((a,b) => b.score - a.score).slice(0,3).map(({entry}) => entry);
-const verified = meta.status === 'verified' && meta.verified;
-const documented = meta.status === 'documented';
 const techArticle = { '@context': 'https://schema.org', '@type': 'TechArticle', headline: meta.title, description: meta.description, datePublished: meta.datePublished.toISOString(), dateModified: meta.dateModified.toISOString(), ...(Astro.site ? { mainEntityOfPage: new URL(`/cases/${meta.slug}/`, Astro.site).toString() } : {}), keywords: [...meta.tags, meta.product, meta.vendor], about: [{ '@type': 'Thing', name: meta.product }, { '@type': 'Thing', name: meta.vendor }] };
 ---
 <SiteLayout title={`${meta.title} | Enterprise IT Fixes`} description={meta.description} canonicalPath={`/cases/${meta.slug}/`} type="article" structuredData={techArticle}>
   <div class="page">
-    <Breadcrumbs items={[{label:'Cases',href:'/browse/'},{label:meta.title}]} />
+    <Breadcrumbs items={[{label:'Guides',href:'/browse/'},{label:meta.title}]} />
     <p class="eyebrow">{meta.vendor} · {meta.product}</p>
     <h1 class="page-title">{meta.title}</h1>
     <p class="page-lead">{meta.description}</p>
-    {documented && <aside class="notice documented-notice"><strong>Vendor-documented guide · not field-tested by this site.</strong> This original troubleshooting guide summarizes the linked vendor sources. It is not a report of an incident investigated by Enterprise IT Fixes. Confirm that the documented behavior and steps match your product version and environment before making changes.</aside>}
+    <aside class="notice"><strong>Use this as a troubleshooting starting point.</strong> The checks and possible resolutions below can help investigate similar symptoms. Confirm the cause and applicability in your own environment, and consult the linked vendor documentation before making changes.</aside>
     <div class="content-layout" style="margin-top:24px">
       <article class="article" itemprop="articleBody"><Content /></article>
-      <aside class="case-sidebar" aria-label="Case details">
-        <div class="sidebar-box"><span class:list={['badge', !verified && (documented ? 'badge-documented' : 'badge-demo')]}>{verified ? 'FIELD-VERIFIED FIX' : documented ? 'DOCUMENTED GUIDE · NOT FIELD-TESTED' : 'DEMO · NOT VERIFIED'}</span><dl><dt>Product</dt><dd>{meta.product}</dd><dt>Vendor</dt><dd>{meta.vendor}</dd><dt>Versions</dt><dd>{meta.versions.join(', ')}</dd><dt>Category</dt><dd><a href={`/browse/categories/${meta.category.toLowerCase().replaceAll(' ','-')}/`}>{meta.category}</a></dd>{verified && meta.lastVerified && <><dt>Last field verified</dt><dd>{meta.lastVerified.toISOString().slice(0,10)}</dd></>}{documented && meta.lastReviewed && <><dt>Sources reviewed</dt><dd>{meta.lastReviewed.toISOString().slice(0,10)}</dd></>}</dl></div>
+      <aside class="case-sidebar" aria-label="Guide details">
+        <div class="sidebar-box"><dl><dt>Product</dt><dd>{meta.product}</dd><dt>Vendor</dt><dd>{meta.vendor}</dd><dt>Versions</dt><dd>{meta.versions.join(', ')}</dd><dt>Category</dt><dd><a href={`/browse/categories/${meta.category.toLowerCase().replaceAll(' ','-')}/`}>{meta.category}</a></dd></dl></div>
         {meta.errorCodes.length > 0 && <div class="sidebar-box"><h2>Error codes</h2><div class="facet-list">{meta.errorCodes.map((value) => <span class="facet-chip">{value}</span>)}</div></div>}
         {meta.eventIds.length > 0 && <div class="sidebar-box"><h2>Event IDs</h2><div class="facet-list">{meta.eventIds.map((value) => <span class="facet-chip">{value}</span>)}</div></div>}
         {meta.logFiles.length > 0 && <div class="sidebar-box"><h2>Log files</h2><div class="facet-list">{meta.logFiles.map((value) => <span class="facet-chip">{value}</span>)}</div></div>}
         {meta.sources.length > 0 && <div class="sidebar-box"><h2>Vendor sources</h2><ul>{meta.sources.map((source) => <li><a href={source.url} rel="external noopener noreferrer">{source.label}</a></li>)}</ul></div>}
         <div class="sidebar-box"><h2>Tags</h2><div class="facet-list">{meta.tags.map((tag) => <a class="facet-chip" href={`/browse/tags/${tag.toLowerCase().replaceAll(' ','-')}/`}>{tag}</a>)}</div></div>
-        <p class="verified-note">Published {meta.datePublished.toISOString().slice(0,10)} · Updated {meta.dateModified.toISOString().slice(0,10)}</p>
+        <p class="page-meta">Published {meta.datePublished.toISOString().slice(0,10)} · Updated {meta.dateModified.toISOString().slice(0,10)}</p>
       </aside>
     </div>
-    {related.length > 0 && <section class="section"><div class="section-heading"><h2>Related cases</h2></div><div class="case-grid">{related.map((item) => <CaseCard entry={item} />)}</div></section>}
+    {related.length > 0 && <section class="section"><div class="section-heading"><h2>Related guides</h2></div><div class="case-grid">{related.map((item) => <CaseCard entry={item} />)}</div></section>}
   </div>
 </SiteLayout>

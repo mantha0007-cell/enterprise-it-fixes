@@ -4,7 +4,6 @@ slug: aadsts50076-mfa-required
 description: 'AADSTS50076 usually signals a required MFA step after a policy, account, or sign-in-context change; inspect the sign-in event.'
 datePublished: 2026-10-07
 dateModified: 2026-10-07
-lastReviewed: 2026-10-07
 product: 'Microsoft Entra ID'
 vendor: 'Microsoft'
 versions: ['Microsoft identity platform; policy behavior depends on tenant configuration']
@@ -14,8 +13,8 @@ errorCodes: ['AADSTS50076']
 eventIds: []
 logFiles: ['Microsoft Entra sign-in logs']
 symptoms: ['The user must use multifactor authentication to access the resource.']
-status: documented
-verified: false
+visibility: published
+
 sources:
   - label: 'Microsoft: AADSTS50076 error code'
     url: 'https://learn.microsoft.com/en-us/entra/identity-platform/reference-error-codes'
@@ -29,7 +28,7 @@ sources:
 
 AADSTS50076 means this sign-in needs an MFA claim that the current session did not satisfy. Have the user complete the expected interactive MFA challenge and retry. If this is unexpected or repeats, inspect the matching Microsoft Entra sign-in event and its Conditional Access and Authentication Details tabs to see which policy or context triggered MFA. Do not disable MFA as a first response.
 
-This guide summarizes Microsoft documentation; this site has not tested it in a tenant.
+Use the sign-in event and policy details to determine which requirement applies in the affected tenant.
 
 ## Problem / symptoms
 
@@ -37,7 +36,7 @@ A token request or application sign-in is interrupted with an MFA requirement. T
 
 ## Exact error
 
-> AADSTS50076: Due to a configuration change made by your administrator, or because you moved to a new location, you must use multifactor authentication to access the resource.
+> AADSTS50076: an additional multifactor authentication step is required.
 
 ## Environment and scope
 
@@ -55,16 +54,13 @@ Microsoft defines this code as a request to use MFA, often after a configuration
 4. Use Troubleshoot Event or sign-in diagnostics if the policy result is unclear. Confirm whether the user completed the challenge and whether the current session was interactive.
 5. If the account is a service or room resource account, verify that the resource-account design is supported before changing its MFA or Conditional Access requirements.
 
-## Root cause
-
+## Likely causes
 The request arrives without the required MFA claim for the current access policy and context. The cause can be a legitimate step-up challenge or a policy/resource-account mismatch. Only the sign-in record and tenant policy show which applies.
 
-## Resolution
-
+## Suggested troubleshooting steps
 For a normal user sign-in, complete MFA and retry with a fresh sign-in request. For a repeated or unexpected interruption, correct the specific assignment, authentication method, device condition, or resource-account design identified in the logs. Keep the intended security requirement in place; adjust policy only after an administrator confirms the desired access rule.
 
-## Verification
-
+## How to check the result
 - Confirm the next sign-in succeeds after the required MFA step.
 - Confirm the log records the expected authentication method and policy outcome.
 - If a policy change was required, test both an in-scope and out-of-scope account/device to ensure the rule still protects the intended population.

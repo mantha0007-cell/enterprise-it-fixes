@@ -4,7 +4,6 @@ slug: windows-update-0x80070005-access-denied
 description: 'Treat 0x80070005 as an access-denied symptom: identify the blocked file, registry key, policy, or security filter before repairing permissions.'
 datePublished: 2026-10-07
 dateModified: 2026-10-07
-lastReviewed: 2026-10-07
 product: 'Windows Update'
 vendor: 'Microsoft'
 versions: ['Supported Windows client, Windows Server, and Azure VM versions']
@@ -14,8 +13,8 @@ errorCodes: ['0x80070005', 'E_ACCESSDENIED']
 eventIds: []
 logFiles: ['WindowsUpdate.log', '%windir%\\Logs\\CBS\\CBS.log']
 symptoms: ['Windows update installation fails with access denied', 'CBS failed to create file']
-status: documented
-verified: false
+visibility: published
+
 sources:
   - label: 'Microsoft: troubleshoot Windows Update error 0x80070005'
     url: 'https://learn.microsoft.com/en-us/troubleshoot/windows-client/installing-updates-features-roles/troubleshoot-windows-update-error-0x80070005'
@@ -27,7 +26,6 @@ sources:
 
 0x80070005 means E_ACCESSDENIED; it does not name one universal broken permission. Correlate the failure time with CBS.log or WindowsUpdate.log, identify the object being denied, and then repair that specific cause. Microsoft lists component-store permissions, TrustedInstaller ownership, security software, SYSTEM rights, and management policy as possible causes. Back up the OS disk before permission repairs.
 
-This page organizes Microsoft's troubleshooting steps; it is not a field-tested incident report.
 
 ## Problem / symptoms
 
@@ -48,16 +46,13 @@ Supported Windows client, Windows Server, and Azure VM systems. The relevant obj
 3. Locate the first relevant access-denied operation and the file, registry key, or service involved. Microsoft specifically calls out %windir%\WinSxS, %windir%\SoftwareDistribution, the Component Based Servicing registry key, SYSTEM permissions, TrustedInstaller, and third-party security filters.
 4. Check recent GPO, endpoint-security, ACL, or servicing changes. Avoid changing permissions on unrelated system paths.
 
-## Root cause
-
+## Likely causes
 The Windows Update/servicing process lacks access to a required object, or another product or policy blocks the operation. The same error code can result from different objects, so applying a blanket ACL reset without checking the log can obscure the actual cause.
 
-## Resolution
-
+## Suggested troubleshooting steps
 Use the repair step that matches the denied object and follow Microsoft's sequence. Their article begins with backing up the OS disk, then covers component-store ACLs, TrustedInstaller ownership, Windows Update component reset, DISM/SFC repair, and third-party interference. The published recursive icacls commands alter permissions across servicing directories; review the target, take a backup, and test on one affected device before fleet deployment. Do not disable endpoint protection across a fleet as a default fix.
 
-## Verification
-
+## How to check the result
 - Retry the failed update after the specific permission or blocking cause is corrected.
 - Confirm the same log operation no longer returns E_ACCESSDENIED.
 - Confirm the update reaches its expected installed state after any required restart.

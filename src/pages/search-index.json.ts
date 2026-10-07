@@ -2,10 +2,9 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
 export const GET: APIRoute = async () => {
-  const entries = await getCollection('cases', ({data}) => data.status === 'verified' && data.verified || data.status === 'documented');
+  const entries = await getCollection('cases', ({data}) => data.visibility === 'published');
   const index = entries.map(({ data }) => ({
     title: data.title,
-    status: data.status,
     description: data.description,
     url: `/cases/${data.slug}/`,
     product: data.product,

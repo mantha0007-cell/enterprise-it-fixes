@@ -1,10 +1,9 @@
 ---
-title: 'AADSTS50020: fix a Microsoft Entra account or tenant mismatch'
+title: 'AADSTS50020: troubleshoot a Microsoft Entra account or tenant mismatch'
 slug: aadsts50020-user-not-in-tenant
 description: 'AADSTS50020 means the identity presented for sign-in is not recognized in the resource tenant; verify the account, tenant, app type, and guest invitation.'
 datePublished: 2026-10-07
 dateModified: 2026-10-07
-lastReviewed: 2026-10-07
 product: 'Microsoft Entra ID'
 vendor: 'Microsoft'
 versions: ['Microsoft Entra B2B collaboration and Microsoft identity platform; behavior depends on app and tenant configuration']
@@ -14,8 +13,8 @@ errorCodes: ['AADSTS50020', '90072']
 eventIds: []
 logFiles: ['Microsoft Entra sign-in logs']
 symptoms: ['User account from identity provider does not exist in tenant', 'The account needs to be added as an external user in the tenant first']
-status: documented
-verified: false
+visibility: published
+
 sources:
   - label: 'Microsoft: troubleshoot AADSTS50020'
     url: 'https://learn.microsoft.com/en-us/troubleshoot/entra/entra-id/app-integration/error-code-aadsts50020-user-account-identity-provider-does-not-exist'
@@ -29,7 +28,6 @@ sources:
 
 AADSTS50020 means Microsoft Entra ID could not match the identity presented by the user to an account that can access the resource tenant. First confirm which account and tenant the sign-in request actually used. If the user is meant to be an external guest, check that the guest exists in the resource tenant and that the invitation was redeemed by the expected identity. Do not invite the same person repeatedly or change app account types until you have checked the failed sign-in details.
 
-This is a source-documented guide, not an incident investigated or reproduced by this site.
 
 ## Problem / symptoms
 
@@ -37,7 +35,7 @@ A user can authenticate with an identity provider but is rejected when opening a
 
 ## Exact error
 
-> AADSTS50020: User account from identity provider does not exist in tenant.
+> AADSTS50020: the sign-in identity is not recognized in the resource tenant.
 
 The full error identifies an account, identity provider, resource tenant, and often the application. Treat tenant names, user addresses, app IDs, and correlation details as sensitive when sharing the message.
 
@@ -57,16 +55,13 @@ Microsoft documents causes that include using the wrong account or tenant, an ap
 4. If this is B2B access, search the resource tenant for the guest using the expected external identity. Check invitation status and whether redemption used a different account than the one now signing in.
 5. Review whether the enterprise application requires user assignment. If it does, verify the expected user or group assignment; assignment problems can have their own sign-in error.
 
-## Root cause
-
+## Likely causes
 The identity provider has authenticated an account, but the tenant receiving the resource request cannot resolve that identity as an authorized tenant-local or invited external user for the application. A wrong tenant endpoint, unsupported account type, missing or mismatched guest invitation, or assignment requirement can lead to this result.
 
-## Resolution
-
+## Suggested troubleshooting steps
 Correct the account selection or tenant authority if the request targets the wrong identity or directory. For intended guest access, invite the correct external identity into the resource tenant and have that user redeem the invitation with that identity. If the app is intended to accept accounts from other tenants, confirm its account type and sign-in endpoint support that design. Assign access only when the application's intended access policy requires it. Do not broaden a single-tenant app or remove assignment controls merely to suppress the error.
 
-## Verification
-
+## How to check the result
 - Repeat the sign-in with the intended identity and resource tenant.
 - Confirm the matching sign-in event names the expected user, application, and tenant and no longer reports AADSTS50020.
 - For a guest invitation, verify that the expected guest object and redemption identity are present in the resource tenant.
