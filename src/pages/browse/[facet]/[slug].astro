@@ -6,7 +6,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import { facets, slugify } from '../../../lib/cases';
 const titles: Record<string,string> = { categories:'Category', products:'Product', vendors:'Vendor', tags:'Tag' };
 export async function getStaticPaths() {
-  const entries = await getCollection('cases', ({data}) => data.status !== 'draft');
+const entries = await getCollection('cases', ({data}) => ['verified', 'documented'].includes(data.status));
   const f = facets(entries);
   return Object.entries(f).flatMap(([facet, values]) => values.map((name) => {
     const slug = slugify(name);

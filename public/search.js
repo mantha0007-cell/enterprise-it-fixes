@@ -8,21 +8,22 @@ if (input) input.value = initial;
 
 function render(items, query) {
   output.replaceChildren();
-  if (!query.trim()) { status.textContent = 'Enter an error, product, log file, or symptom to search verified cases.'; return; }
-  if (!items.length) { status.textContent = 'No verified cases matched that search.'; return; }
-  status.textContent = `${items.length} verified ${items.length === 1 ? 'case' : 'cases'} found.`;
+  if (!query.trim()) { status.textContent = 'Enter an error, product, log file, or symptom to search guides and field-verified fixes.'; return; }
+  if (!items.length) { status.textContent = 'No guides or field-verified fixes matched that search.'; return; }
+  status.textContent = `${items.length} ${items.length === 1 ? 'result' : 'results'} found.`;
   for (const item of items) {
     const link = document.createElement('a'); link.className = 'search-result-card'; link.href = item.url;
+    const badge = document.createElement('span'); badge.className = `badge ${item.status === 'verified' ? '' : 'badge-documented'}`; badge.textContent = item.status === 'verified' ? 'FIELD-VERIFIED FIX' : 'DOCUMENTED GUIDE · NOT FIELD-TESTED';
     const heading = document.createElement('h2'); heading.textContent = item.title;
     const summary = document.createElement('p'); summary.textContent = item.description;
     const meta = document.createElement('small'); meta.textContent = `${item.vendor} · ${item.product} · ${item.category} · Updated ${item.dateModified}`;
-    link.append(heading, summary, meta); output.append(link);
+    link.append(badge, heading, summary, meta); output.append(link);
   }
 }
 
 let indexPromise;
 function search(query) {
-  status.textContent = 'Searching verified cases…';
+  status.textContent = 'Searching guides and field-verified fixes…';
   indexPromise ||= fetch('/search-index.json').then((response) => {
     if (!response.ok) throw new Error('Search index unavailable');
     return response.json();

@@ -1,48 +1,59 @@
 # Enterprise IT Fixes
 
-An English-language library of real enterprise IT troubleshooting cases. The site puts the short answer first and records the evidence, root cause, fix, and verification for each case.
+An English-language library for enterprise IT troubleshooting. Search exact error codes, event IDs, log lines, products, and symptoms. Every page states whether it is a vendor-documented guide or a fix verified in a real environment.
 
-## Status
+## Evidence labels
 
-The initial site source is an Astro static site. Its only case is an explicitly marked demo with no technical diagnosis or fix. The demo is excluded from search indexing and the internal search index. No analytics or advertising code is included.
+- **Documented guide — not field-tested:** original troubleshooting guidance based on linked vendor documentation. It is not presented as an incident investigated or reproduced by this site.
+- **Field-verified fix:** a real issue with recorded evidence, an identified root cause, a fix applied, and a successful retest in the stated environment.
 
-The site is published on [Cloudflare Pages](https://enterprise-it-fixes.pages.dev/). Cloudflare builds the `main` branch from the GitHub repository with the Astro preset, `pnpm build`, and `dist` as the output directory. The `SITE_URL` build variable is set to the production URL so canonical links and the sitemap use the public origin. The Cloudflare GitHub App is restricted to this repository.
+This repository currently publishes ten documented guides. The sample page is a non-indexed draft and is excluded from case routes, search, browsing, and the sitemap. No analytics or advertising code is included.
 
-## Add a case
+## Published guides
 
-1. Copy `src/content/cases/sample-case.md` and give it a unique filename and slug.
-2. Fill every frontmatter field using the same spelling and types. Keep exact error codes, event IDs, log file names, product names, and version strings when they are safe to share.
-3. Write the case in English using the headings in the template. Put the verified fix near the top.
-4. Change `status` to `verified` and `verified` to `true` only after the root cause and fix were confirmed in the stated environment.
-5. Remove the demo warning and demo wording. Check the privacy checklist before committing.
-6. Update `dateModified` and `lastVerified` only when the case was actually reviewed or tested.
+1. Microsoft Entra AADSTS50011 redirect URI mismatch
+2. Microsoft Entra AADSTS700016 application not found
+3. Microsoft Entra AADSTS50076 MFA required
+4. Windows Update 0x800F081F source files not found
+5. Windows Update 0x80070005 access denied
+6. Exchange Online 550 5.7.520 external forwarding blocked
+7. Intune UWP 0x87D1041C and System context
+8. Configuration Manager PXE across routed subnets
+9. Configuration Manager PXE certificate error 0x80092002
+10. Windows DNS Server Event ID 4013
 
-Unverified suggestions are not published as verified solutions. Do not invent technical facts to fill an empty section.
+These topics target specific troubleshooting queries. Search demand and traffic are not guaranteed or measured here.
 
-## Privacy review before publication
+## Hosting
 
-Review every case, attachment, code block, and screenshot. Remove or replace:
+The site is published on [Cloudflare Pages](https://enterprise-it-fixes.pages.dev/). Cloudflare builds the main branch from the GitHub repository with the Astro preset, pnpm build, and dist as the output directory. SITE_URL is set to the production URL so canonical links and the sitemap use the public origin. The Cloudflare GitHub App is restricted to this repository.
 
-- company, customer, tenant, subscription, and internal domain names;
-- usernames, e-mail addresses, hostnames, serial numbers, and device identifiers;
-- internal or sensitive public IP addresses;
-- passwords, access tokens, API keys, private keys, certificates, and other secrets;
-- screenshots or log excerpts that expose confidential data;
-- details that identify a customer or disclose an internal security posture.
+## Add or update a guide
 
-Use consistent placeholders such as `example.com`, `SERVER-01`, or `<tenant-id>`. Re-read the final rendered page and search the source for `@`, tenant IDs, long hexadecimal strings, and real organization names. A Git commit is public and cannot be made private by removing the text in a later commit.
+1. Start from src/content/cases/sample-case.md and use a unique filename and slug.
+2. Fill every required frontmatter field. Keep exact error codes, event IDs, log file names, products, and versions only where they are safe to share.
+3. Write in English using the headings in the template. Link primary vendor sources for documented behavior.
+4. Use status documented and verified false for source-based guidance. Explain what remains environment-specific.
+5. Use status verified and verified true only after a real issue was investigated, the root cause was supported by evidence, a fix was applied, and the result was retested in the stated environment.
+6. Update dateModified when content changes. Set lastVerified only when the fix was actually tested again; set lastReviewed for a documentation review.
+7. Complete PUBLISH-CHECKLIST.md and inspect the rendered page before publication.
+
+Never invent incident details, logs, test results, or technical conclusions to fill a section.
+
+## Privacy review
+
+Review every case, attachment, code block, and screenshot. Remove company, customer, tenant, subscription, internal domain, user, e-mail, host, serial, and device identifiers. Check IP addresses and remove secrets, tokens, keys, and confidential certificates. Use placeholders such as example.com, SERVER-01, or <tenant-id>. Search the final content and review the rendered page before committing. A public Git commit cannot be made private by removing information in a later commit.
 
 ## Run locally
 
 Requires Node.js 22.12 or newer and pnpm.
 
 ```powershell
-cd work/enterprise-it-fixes
 pnpm install
 pnpm dev
 ```
 
-Open the local URL printed by Astro. Local preview pages include `noindex` metadata.
+Open the local URL printed by Astro. Local preview pages include noindex metadata.
 
 ## Build
 
@@ -51,19 +62,19 @@ pnpm build
 pnpm preview
 ```
 
-For a production build, set `SITE_URL` to the exact public origin first. This sets canonical URLs and the sitemap. Search Console and Bing Webmaster verification values can later be added as verification meta tags in `src/layouts/SiteLayout.astro` after the hosting origin is known.
+Set SITE_URL to the production origin for a production build. This controls canonical links and the sitemap.
 
 ## Deploy
 
-Cloudflare Pages deploys automatically when `main` changes. For another host, use `pnpm build`, publish `dist/`, and set `SITE_URL` to that host's final HTTPS origin.
+Cloudflare Pages deploys automatically when main changes. For another static host, build with pnpm build, publish dist/, and set SITE_URL to the final HTTPS origin.
 
-## Search, SEO, and structured data
+## Search and structured data
 
-The browser-side search uses a generated JSON index and includes verified cases only. Case pages emit `TechArticle` and breadcrumb structured data; they do not claim a HowTo rich result. The sitemap includes site and case pages when `SITE_URL` is set. Demo pages and the search page use `noindex`.
+The browser-side search uses a generated JSON index. Case pages emit TechArticle and breadcrumb structured data. The sitemap contains published guides and site pages; drafts, demos, and the search page are excluded or marked noindex.
 
 ## Project structure
 
-- `src/content/cases/` — Markdown cases and required metadata.
-- `src/pages/` — homepage, cases, search, browse facets, About, Privacy, and 404.
-- `src/layouts/` — shared document shell, metadata, responsive styling.
-- `public/` — static assets and the small client-side search script.
+- src/content/cases/ — Markdown guides and fixes.
+- src/pages/ — homepage, cases, search, browse facets, About, Privacy, and 404.
+- src/layouts/ — shared document shell, metadata, and responsive styling.
+- public/ — static assets and client-side search.

@@ -9,7 +9,8 @@ const cases = defineCollection({
     description: z.string().max(180),
     datePublished: z.coerce.date(),
     dateModified: z.coerce.date(),
-    lastVerified: z.coerce.date(),
+    lastVerified: z.coerce.date().optional(),
+    lastReviewed: z.coerce.date().optional(),
     product: z.string(),
     vendor: z.string(),
     versions: z.array(z.string()),
@@ -19,8 +20,9 @@ const cases = defineCollection({
     eventIds: z.array(z.string()),
     logFiles: z.array(z.string()),
     symptoms: z.array(z.string()),
-    status: z.enum(['verified', 'demo', 'draft']),
+    status: z.enum(['verified', 'documented', 'demo', 'draft']),
     verified: z.boolean(),
+    sources: z.array(z.object({ label: z.string(), url: z.string().url() })).default([]),
   }),
 });
 
