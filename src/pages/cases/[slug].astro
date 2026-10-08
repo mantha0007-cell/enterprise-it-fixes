@@ -10,7 +10,7 @@ const meta = entry.data;
 const feedbackUrl = new URL('https://github.com/mantha0007-cell/enterprise-it-fixes/issues/new');
 feedbackUrl.searchParams.set('title', `Guide feedback: ${meta.slug}`);
 const related = (await getCollection('cases', ({data}) => data.visibility === 'published' && data.slug !== meta.slug))
-  .map((candidate) => ({ entry: candidate, score: (candidate.data.product === meta.product ? 5 : 0) + (candidate.data.vendor === meta.vendor ? 2 : 0) + (candidate.data.category === meta.category ? 2 : 0) + candidate.data.tags.filter((tag) => meta.tags.includes(tag)).length }))
+  .map((candidate) => ({ entry: candidate, score: (candidate.data.product === meta.product ? 5 : 0) + (candidate.data.category === meta.category ? 2 : 0) + candidate.data.tags.filter((tag) => meta.tags.includes(tag)).length }))
   .filter((candidate) => candidate.score > 0).sort((a,b) => b.score - a.score).slice(0,3).map(({entry}) => entry);
 const techArticle = { '@context': 'https://schema.org', '@type': 'TechArticle', headline: meta.title, description: meta.description, datePublished: meta.datePublished.toISOString(), dateModified: meta.dateModified.toISOString(), ...(Astro.site ? { mainEntityOfPage: new URL(`/cases/${meta.slug}/`, Astro.site).toString() } : {}), keywords: [...meta.tags, meta.product, meta.vendor], about: [{ '@type': 'Thing', name: meta.product }, { '@type': 'Thing', name: meta.vendor }] };
 ---
