@@ -5,12 +5,11 @@ import CaseCard from '../components/CaseCard.astro';
 import { slugify } from '../lib/cases';
 
 const allCases = await getCollection('cases', ({ data }) => data.visibility === 'published');
-const featuredSlugs = [
-  'aadsts50011-redirect-uri-mismatch',
-  'configmgr-pxe-remote-subnet-ip-helper',
-  'windows-update-0x800f081f',
-];
-const featured = featuredSlugs.map((slug) => allCases.find((entry) => entry.data.slug === slug)).filter(Boolean);
+const featured = [...allCases]
+  .sort((a, b) => b.data.datePublished.valueOf() - a.data.datePublished.valueOf()
+    || b.data.dateModified.valueOf() - a.data.dateModified.valueOf()
+    || a.data.title.localeCompare(b.data.title))
+  .slice(0, 3);
 const categoryCounts = new Map<string, number>();
 for (const entry of allCases) categoryCounts.set(entry.data.category, (categoryCounts.get(entry.data.category) ?? 0) + 1);
 const quickCategories = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
@@ -34,7 +33,7 @@ const quickCategories = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]
     </section>
 
     <section class="section home-featured">
-      <div class="section-heading"><div><p class="eyebrow">Get started</p><h2>Guides worth opening first</h2></div><a href="/browse/">Browse all {allCases.length} guides <span aria-hidden="true">→</span></a></div>
+      <div class="section-heading"><h2 id="latest-guides-title">Recently published guides</h2><a href="/browse/">View all guides <span aria-hidden="true">→</span></a></div>
       {featured.length ? <div class="case-grid">{featured.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state">Guides will appear here as they are published.</p>}
     </section>
 
@@ -44,7 +43,6 @@ const quickCategories = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]
         {quickCategories.map(([name, count]) => <a href={`/browse/categories/${slugify(name)}/`}>{name}<span>{count}</span></a>)}
         <a class="all-topics" href="/browse/">All topics <span aria-hidden="true">↗</span></a>
       </nav>
-      <p>Vendor-linked guidance. Check that each step fits your environment.</p>
     </section>
   </div>
 </SiteLayout>
@@ -66,7 +64,6 @@ const quickCategories = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]
   .home-signals b{color:white}
   .home-featured{margin-top:42px}
   .home-featured .section-heading{align-items:end;margin-bottom:17px}
-  .home-featured .section-heading .eyebrow{margin:0 0 4px;font-size:.68rem}
   .home-featured .section-heading h2{font-size:1.48rem}
   .home-featured .case-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
   .home-featured .case-card{min-height:188px;padding:19px;border-radius:14px}
@@ -77,7 +74,6 @@ const quickCategories = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]
   .topic-links a:hover{color:var(--teal);text-decoration:underline;text-underline-offset:3px}
   .topic-links a span:not([aria-hidden]){display:inline-grid;min-width:20px;height:20px;place-items:center;border-radius:999px;background:#e7eeef;color:#52636c;font-size:.7rem}
   .topic-links .all-topics{color:var(--teal);font-weight:700}
-  .home-topics>p{flex:0 0 auto;margin:0;color:#687781;font-size:.75rem}
-  @media(max-width:850px){.home-topics{align-items:flex-start;flex-direction:column;gap:10px}.home-topics>p{margin-top:0}}
+  @media(max-width:850px){.home-topics{align-items:flex-start;flex-direction:column;gap:10px}}
   @media(max-width:620px){.home-page{padding-top:18px}.home-hero{padding:31px 22px;border-radius:18px}.home-hero h1{font-size:2.8rem}.home-hero .search-form{display:grid;grid-template-columns:1fr}.home-hero .search-form button{width:100%}.home-signals{gap:8px 15px}.home-featured{margin-top:31px}.home-featured .section-heading{align-items:flex-start}.home-featured .section-heading h2{font-size:1.3rem}.home-featured .section-heading>a{font-size:.8rem;text-align:right}.home-featured .case-grid{grid-template-columns:1fr}.home-featured .case-card{min-height:0}.desktop-break{display:none}.home-topics{margin-top:20px}.topic-links{gap:10px 16px}}
 </style>
