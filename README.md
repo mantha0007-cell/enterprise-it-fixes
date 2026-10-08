@@ -4,7 +4,7 @@ An English-language library of practical enterprise IT troubleshooting guides. S
 
 Articles explain issue patterns in original wording and link to relevant vendor sources. Each guide must add a diagnostic angle of its own, such as a decision path, a useful comparison, or a risk boundary; a plain paraphrase of a vendor article is not enough. The guides are intended as helpful guidelines: the actual cause and suitable change depend on the environment. They do not claim that Enterprise IT Fixes investigated a specific customer's incident or applied a fix in that environment.
 
-This repository currently publishes sixteen guides. The sample page is a non-indexed draft and is excluded from case routes, search, browsing, and the sitemap. Cloudflare Web Analytics is enabled for the Pages project. Google Analytics is prepared but remains inactive until a GA4 Measurement ID is configured; its tag is gated behind an explicit analytics choice. No advertising code or slots are active.
+This repository currently publishes seventeen guides. The sample page is a non-indexed draft and is excluded from case routes, search, browsing, and the sitemap. Cloudflare Web Analytics is enabled for the Pages project. Google Analytics is prepared but remains inactive until a GA4 Measurement ID is configured; its tag is gated behind an explicit analytics choice. No advertising code or slots are active.
 
 ## Published guides
 
@@ -24,6 +24,7 @@ This repository currently publishes sixteen guides. The sample page is a non-ind
 14. Outlook messages missing from Classic Outlook
 15. Choosing between chat threads, Codex subagents, and programmable agent workflows
 16. Setting up a Windows Hello PIN on Windows 11
+17. Setting Chrome as the default browser and file handler in Windows 11
 
 These topics target specific troubleshooting queries. Search demand and traffic are not guaranteed or measured here.
 
