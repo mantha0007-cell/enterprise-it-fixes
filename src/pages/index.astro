@@ -14,7 +14,7 @@ const categoryCounts = new Map<string, number>();
 for (const entry of allCases) categoryCounts.set(entry.data.category, (categoryCounts.get(entry.data.category) ?? 0) + 1);
 const quickCategories = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
 ---
-<SiteLayout description="Find practical enterprise IT troubleshooting guidance by exact error, event ID, product, or symptom, with direct links to vendor sources.">
+<SiteLayout title="Enterprise IT Troubleshooting Guides | Enterprise IT Fixes" description="Search practical enterprise IT troubleshooting guides by exact error, event ID, product, or symptom. Follow focused diagnostic checks and verify details against vendor sources.">
   <div class="page home-page">
     <section class="hero home-hero">
       <p class="eyebrow">Enterprise troubleshooting, minus the noise</p>
