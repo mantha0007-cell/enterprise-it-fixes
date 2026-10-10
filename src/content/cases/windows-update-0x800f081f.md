@@ -57,6 +57,8 @@ Use this only where the installed Windows version supports NetFx3 as an optional
 
 This gives a focused check: confirm the failed operation, make the payload available through the configured update source or a matching installation source, then retry once and inspect the servicing log if it still fails.
 
+If the log instead records `0x800F0906` while obtaining the NetFx3 payload, see our guide to the [documented .NET 3.5 download failure](/cases/dotnet-35-0x800f0906-download-failure/). The two codes point to different checks.
+
 ## What the evidence establishes
 
 Microsoft describes the code as a missing source for a package or file and recommends repairing the component store with DISM, followed by SFC. The code alone does not identify which package payload is missing or prove that any arbitrary ISO is a valid source.
