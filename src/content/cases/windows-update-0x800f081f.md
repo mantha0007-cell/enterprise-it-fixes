@@ -1,14 +1,14 @@
 ---
-title: 'Windows Update 0x800f081f: find a matching component-store repair source'
+title: '0x800f081f: troubleshoot a missing Windows or .NET 3.5 source'
 slug: windows-update-0x800f081f
-description: '0x800f081f means CBS could not find a repair source; run DISM, then SFC, and check source matching if repair still fails.'
+description: 'Diagnose 0x800f081f during Windows repair or .NET Framework 3.5 setup by checking the missing payload, source path, and Windows version match.'
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: 'Windows Update and Component-Based Servicing'
 vendor: 'Microsoft'
 versions: ['Supported Windows client and Server versions; see linked Microsoft applicability']
 category: 'Windows servicing'
-tags: ['Windows Update', 'DISM', 'SFC', 'component store', 'CBS']
+tags: ['Windows Update', '.NET Framework 3.5', 'NetFx3', 'DISM', 'SFC', 'component store', 'CBS']
 errorCodes: ['0x800f081f', 'CBS_E_SOURCE_MISSING']
 eventIds: []
 logFiles: ['%windir%\\Logs\\CBS\\CBS.log', '%windir%\\Logs\\DISM\\dism.log']
@@ -20,11 +20,17 @@ sources:
     url: 'https://learn.microsoft.com/en-us/troubleshoot/windows-client/installing-updates-features-roles/common-windows-update-errors'
   - label: 'Microsoft: repair a Windows image'
     url: 'https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/repair-a-windows-image'
+  - label: 'Microsoft: .NET Framework 3.5 installation errors'
+    url: 'https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/dotnet-framework-35-installation-error'
+  - label: 'Microsoft: install .NET Framework 3.5 on Windows'
+    url: 'https://learn.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows'
+  - label: 'Microsoft: install .NET Framework 3.5 on Windows 11'
+    url: 'https://learn.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-11'
 ---
 
 ## Short answer
 
-0x800f081f is CBS_E_SOURCE_MISSING: servicing could not find a required package or repair file. On an affected, elevated device, run DISM component-store repair and then System File Checker. If DISM cannot reach a usable repair source, provide installation media that matches the target Windows release, edition, language, and servicing level; a mismatched image can leave the error unresolved.
+0x800f081f is CBS_E_SOURCE_MISSING: Windows servicing could not find a required payload. First identify what was being installed or repaired. A component-store repair and enabling the optional .NET Framework 3.5 feature use different source paths, so the right next check depends on the failed operation. Match any offline source to the target Windows version and follow Microsoft's current version-specific instructions.
 
 ## Our diagnostic lens
 
@@ -38,6 +44,18 @@ A cumulative update, feature installation, or component repair fails and the ser
 ## Environment and scope
 
 Windows component-based servicing on supported Windows client or Server versions. The exact repair source and DISM options depend on the OS image, update source policy, and whether the device can reach Microsoft Update or WSUS.
+
+## When .NET Framework 3.5 (NetFx3) is the failed feature
+
+If the code appeared while enabling .NET Framework 3.5 from Windows Features, DISM, PowerShell, or a Server feature workflow, treat it first as a missing optional-feature payload. The error by itself does not show that the whole component store needs repair.
+
+On supported Windows versions that provide NetFx3 as an optional feature, check whether the device is allowed to download optional-feature files from Windows Update. In a managed environment, the configured repair source or policy may direct the request to WSUS; ask the device administrator to verify the optional component installation and repair policy before changing it.
+
+If the organization uses installation media as the source, verify that `\sources\sxs` exists, is readable by the device, and matches the target Windows version. Microsoft documents the supported DISM syntax and Server-specific installation methods in its linked error-resolution article. Use that version-specific procedure rather than copying a source path or image from another Windows release.
+
+Use this only where the installed Windows version supports NetFx3 as an optional feature. Windows 11 version 26H1, build 28000 and later, uses a standalone .NET Framework 3.5 installer; follow Microsoft's current installation page for that release instead of this optional-feature command. Windows Server has its own feature-installation workflow and source requirements; use the linked deployment guidance for the installed Server version.
+
+This gives a focused check: confirm the failed operation, make the payload available through the configured update source or a matching installation source, then retry once and inspect the servicing log if it still fails.
 
 ## What the evidence establishes
 
@@ -62,6 +80,8 @@ From an elevated Command Prompt, run the vendor-recommended repair sequence:
 
 Restart if requested, then retry the failed update. By default, DISM may use Windows Update as its repair source. Where that source is unavailable, follow Microsoft's Windows image repair guidance to specify a matching local or network source and the correct WIM/ESD index. Do not guess an index or use media from a different release.
 
+For a NetFx3 feature-installation failure, use the preceding section's source checks; `RestoreHealth` alone does not supply the optional feature payload.
+
 ## How to check the result
 - Confirm DISM completes successfully and record its exit/result details.
 - Confirm SFC completes and reports whether it repaired files or found no integrity violations.
@@ -72,3 +92,6 @@ Restart if requested, then retry the failed update. By default, DISM may use Win
 
 - [Common Windows Update errors](https://learn.microsoft.com/en-us/troubleshoot/windows-client/installing-updates-features-roles/common-windows-update-errors)
 - [Repair a Windows image](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/repair-a-windows-image)
+- [.NET Framework 3.5 installation errors](https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/dotnet-framework-35-installation-error)
+- [Install .NET Framework 3.5 on Windows](https://learn.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows)
+- [Install .NET Framework 3.5 on Windows 11](https://learn.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-11)
