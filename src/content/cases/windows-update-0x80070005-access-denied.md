@@ -1,9 +1,9 @@
 ---
-title: 'Windows Update 0x80070005: find what is denying access'
+title: 'Windows Update 0x80070005: access denied'
 slug: windows-update-0x80070005-access-denied
 description: 'Treat 0x80070005 as an access-denied symptom: identify the blocked file, registry key, policy, or security filter before repairing permissions.'
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: 'Windows Update'
 vendor: 'Microsoft'
 versions: ['Supported Windows client, Windows Server, and Azure VM versions']

@@ -1,9 +1,9 @@
 ---
-title: 'AADSTS50020: troubleshoot a Microsoft Entra account or tenant mismatch'
+title: 'AADSTS50020: Entra tenant mismatch'
 slug: aadsts50020-user-not-in-tenant
 description: 'AADSTS50020 means the identity presented for sign-in is not recognized in the resource tenant; verify the account, tenant, app type, and guest invitation.'
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: 'Microsoft Entra ID'
 vendor: 'Microsoft'
 versions: ['Microsoft Entra B2B collaboration and Microsoft identity platform; behavior depends on app and tenant configuration']

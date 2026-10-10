@@ -1,9 +1,9 @@
 ---
-title: "Windows DNS Server Event ID 4013 waits for Active Directory replication"
+title: "DNS Event 4013: AD replication waits"
 slug: "windows-server-dns-event-4013-ad-replication"
 description: "Diagnose DNS Server Event ID 4013 by checking AD DS initial synchronization, replication, DC discovery, and DNS startup dependencies."
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: "Windows Server DNS Server"
 vendor: "Microsoft"
 versions: ["Windows Server; verify the current article applies to your version"]

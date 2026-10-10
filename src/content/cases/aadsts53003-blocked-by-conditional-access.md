@@ -1,9 +1,9 @@
 ---
-title: 'AADSTS53003: find which Conditional Access policy blocked sign-in'
+title: 'AADSTS53003: Conditional Access block'
 slug: aadsts53003-blocked-by-conditional-access
 description: 'AADSTS53003 means Conditional Access blocked the request; use the matching sign-in event to identify the policy and unmet condition before changing access.'
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: 'Microsoft Entra ID'
 vendor: 'Microsoft'
 versions: ['Microsoft Entra Conditional Access; policy results depend on tenant configuration and sign-in context']

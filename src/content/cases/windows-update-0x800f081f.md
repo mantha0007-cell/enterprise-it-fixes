@@ -1,5 +1,5 @@
 ---
-title: '0x800f081f: troubleshoot a missing Windows or .NET 3.5 source'
+title: '0x800f081f: missing .NET 3.5 source'
 slug: windows-update-0x800f081f
 description: 'Diagnose 0x800f081f during Windows repair or .NET Framework 3.5 setup by checking the missing payload, source path, and Windows version match.'
 datePublished: 2026-10-07

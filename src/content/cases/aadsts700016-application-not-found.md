@@ -1,9 +1,9 @@
 ---
-title: 'AADSTS700016: application not found in the Microsoft Entra tenant'
+title: 'AADSTS700016: Entra app not found'
 slug: aadsts700016-application-not-found
 description: 'Trace AADSTS700016 to the client ID and tenant in the token request before changing app consent or registration.'
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: 'Microsoft Entra ID'
 vendor: 'Microsoft'
 versions: ['Microsoft identity platform; tenant and application configuration varies']

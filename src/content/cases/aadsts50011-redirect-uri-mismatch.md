@@ -1,9 +1,9 @@
 ---
-title: 'AADSTS50011: troubleshoot a Microsoft Entra redirect URI mismatch'
+title: 'AADSTS50011: Entra redirect URI mismatch'
 slug: aadsts50011-redirect-uri-mismatch
 description: 'Compare the redirect_uri in the failed sign-in request with the app registration, then correct the side that is wrong.'
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: 'Microsoft Entra ID'
 vendor: 'Microsoft'
 versions: ['Microsoft identity platform; OIDC and OAuth 2.0 applications']

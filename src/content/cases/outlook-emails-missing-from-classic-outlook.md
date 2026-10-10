@@ -1,9 +1,9 @@
 ---
-title: "Outlook emails appear online but are missing in Classic Outlook"
+title: "Classic Outlook emails missing"
 slug: "outlook-emails-missing-from-classic-outlook"
 description: "Diagnose mail visible in Outlook on the web but missing in Classic Outlook by checking folder scope, view, sync state, and the local OST cache."
 datePublished: 2026-10-08
-dateModified: 2026-10-08
+dateModified: 2026-10-10
 product: "Classic Outlook for Windows"
 vendor: "Microsoft"
 versions: ["Classic Outlook with an Exchange or Microsoft 365 account; exact build not specified"]

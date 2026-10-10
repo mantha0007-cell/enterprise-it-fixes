@@ -1,9 +1,9 @@
 ---
-title: "Choosing a Multi-Agent Setup for ChatGPT, Codex, and the OpenAI API"
+title: "OpenAI multi-agent setup: ChatGPT and Codex"
 slug: "choosing-a-multi-agent-setup"
 description: "Compare separate chat threads, Codex subagents, and programmable OpenAI agent workflows to choose a practical setup for collaborative AI work."
 datePublished: 2026-10-08
-dateModified: 2026-10-08
+dateModified: 2026-10-10
 product: "ChatGPT, Codex, and OpenAI Agents SDK"
 vendor: "OpenAI"
 versions: ["Product capabilities and interfaces change; verify current documentation before implementation"]

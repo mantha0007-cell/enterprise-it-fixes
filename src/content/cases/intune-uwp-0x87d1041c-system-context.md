@@ -1,9 +1,9 @@
 ---
-title: "Intune UWP app reports 0x87D1041C after System-context installation"
+title: "Intune 0x87D1041C: system install fails"
 slug: "intune-uwp-0x87d1041c-system-context"
 description: "Understand Intune error 0x87D1041C for a Microsoft Store UWP app already installed for a user when deployment runs in System context."
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: "Microsoft Intune"
 vendor: "Microsoft"
 versions: ["Microsoft Intune", "Windows 10 and Windows 11; behavior depends on package"]

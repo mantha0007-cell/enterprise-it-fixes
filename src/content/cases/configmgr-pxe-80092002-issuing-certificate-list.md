@@ -1,9 +1,9 @@
 ---
-title: "Configuration Manager PXE certificate error 0x80092002"
+title: "PXE 0x80092002: certificate list error"
 slug: "configmgr-pxe-80092002-issuing-certificate-list"
 description: "Investigate Configuration Manager PXE certificate encoding error 0x80092002 and the IssuingCertificateList registry value."
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: "Microsoft Configuration Manager"
 vendor: "Microsoft"
 versions: ["Microsoft Configuration Manager current branch"]

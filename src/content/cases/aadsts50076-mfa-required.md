@@ -1,9 +1,9 @@
 ---
-title: 'AADSTS50076: diagnose the Microsoft Entra MFA requirement'
+title: 'AADSTS50076: Microsoft Entra MFA required'
 slug: aadsts50076-mfa-required
 description: 'AADSTS50076 usually signals a required MFA step after a policy, account, or sign-in-context change; inspect the sign-in event.'
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: 'Microsoft Entra ID'
 vendor: 'Microsoft'
 versions: ['Microsoft identity platform; policy behavior depends on tenant configuration']

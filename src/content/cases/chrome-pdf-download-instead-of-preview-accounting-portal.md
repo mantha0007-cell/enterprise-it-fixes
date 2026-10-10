@@ -1,9 +1,9 @@
 ---
-title: "Chrome Downloads a PDF Instead of Showing It in an Accounting Portal"
+title: "Chrome downloads PDF instead of preview"
 slug: "chrome-pdf-download-instead-of-preview-accounting-portal"
 description: "Troubleshoot a missing PDF preview in a Windows accounting portal by separating Chrome's PDF preference from the portal's HTTP response."
 datePublished: 2026-10-09
-dateModified: 2026-10-09
+dateModified: 2026-10-10
 product: "Google Chrome for Windows"
 vendor: "Google"
 versions: ["Chrome on Windows; exact browser and portal versions not specified"]

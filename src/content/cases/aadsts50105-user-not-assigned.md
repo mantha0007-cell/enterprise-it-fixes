@@ -1,9 +1,9 @@
 ---
-title: 'AADSTS50105: assign the user to the Microsoft Entra enterprise app'
+title: 'AADSTS50105: Entra user not assigned'
 slug: aadsts50105-user-not-assigned
 description: 'AADSTS50105 means the enterprise app requires assignment and the signed-in user lacks a qualifying assignment; verify the access policy before changing it.'
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: 'Microsoft Entra ID'
 vendor: 'Microsoft'
 versions: ['Microsoft Entra enterprise applications using SAML, OpenID Connect, OAuth 2.0, WS-Federation, or Application Proxy']

@@ -1,9 +1,9 @@
 ---
-title: "Configuration Manager PXE fails across a routed subnet"
+title: "ConfigMgr PXE fails across subnets"
 slug: "configmgr-pxe-remote-subnet-ip-helper"
 description: "Troubleshoot Configuration Manager PXE clients on a remote VLAN with packet forwarding, DHCP, distribution point, and SMSPXE.log checks."
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: "Microsoft Configuration Manager"
 vendor: "Microsoft"
 versions: ["Microsoft Configuration Manager current branch"]

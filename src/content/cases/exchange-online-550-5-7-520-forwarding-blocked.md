@@ -1,9 +1,9 @@
 ---
-title: "Exchange Online 550 5.7.520: automatic external forwarding is blocked"
+title: "Exchange 550 5.7.520: forwarding blocked"
 slug: "exchange-online-550-5-7-520-forwarding-blocked"
 description: "Diagnose Exchange Online NDR 550 5.7.520 when automatic forwarding to an external recipient is blocked by outbound spam policy."
 datePublished: 2026-10-07
-dateModified: 2026-10-07
+dateModified: 2026-10-10
 product: "Exchange Online"
 vendor: "Microsoft"
 versions: ["Exchange Online"]

@@ -1,9 +1,9 @@
 ---
-title: "Set Chrome as the Default Browser and File Handler in Windows 11"
+title: "Windows 11 Chrome defaults with SetUserFTA"
 slug: "windows-11-chrome-default-apps-setuserfta"
 description: "Set Chrome for web links and supported file types in Windows 11, then choose the right supported deployment path for managed devices."
 datePublished: 2026-10-08
-dateModified: 2026-10-08
+dateModified: 2026-10-10
 product: "Windows 11 and Google Chrome"
 vendor: "Microsoft"
 versions: ["Windows 11; available file and protocol handlers depend on installed applications and device policy"]
