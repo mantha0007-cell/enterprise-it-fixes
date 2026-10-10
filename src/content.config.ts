@@ -20,6 +20,13 @@ const cases = defineCollection({
     symptoms: z.array(z.string()),
     visibility: z.enum(['published', 'demo', 'draft']),
     sources: z.array(z.object({ label: z.string(), url: z.string().url() })).default([]),
+    commercialRecommendation: z.object({
+      kind: z.enum(['affiliate', 'sponsor']),
+      title: z.string(),
+      description: z.string(),
+      url: z.string().url(),
+      provider: z.string(),
+    }).optional(),
   }),
 });
 

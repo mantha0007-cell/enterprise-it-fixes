@@ -1,0 +1,32 @@
+---
+interface Props {
+  kind: 'affiliate' | 'sponsor';
+  title: string;
+  description: string;
+  url: string;
+  provider: string;
+}
+
+const { kind, title, description, url, provider } = Astro.props;
+const destination = new URL(url);
+if (destination.protocol !== 'https:') throw new Error('Commercial recommendation links must use HTTPS.');
+const disclosure = kind === 'affiliate'
+  ? 'Affiliate link: we may earn a commission if you make a qualifying purchase.'
+  : 'Sponsored resource: the provider pays for this placement.';
+---
+<aside class="partner-recommendation" aria-label={kind === 'affiliate' ? 'Affiliate recommendation' : 'Sponsored resource'}>
+  <p class="commercial-label">{kind === 'affiliate' ? 'Affiliate recommendation' : 'Sponsored resource'}</p>
+  <h2>{title}</h2>
+  <p>{description}</p>
+  <a href={destination.toString()} rel="sponsored nofollow noopener noreferrer" target="_blank">Visit {provider} <span aria-hidden="true">↗</span></a>
+  <small>{disclosure}</small>
+</aside>
+
+<style>
+  .partner-recommendation{margin-top:22px;padding:18px 20px;border:1px solid #cde4e1;border-radius:10px;background:#f4faf9}
+  .commercial-label{margin:0 0 5px;color:#087e83;font-size:.7rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+  h2{margin:0 0 7px;color:#101a24;font-size:1.05rem}
+  p:not(.commercial-label){margin:0 0 10px;color:#42535e;font-size:.92rem}
+  a{font-weight:700}
+  small{display:block;margin-top:9px;color:#5e6d79;font-size:.75rem}
+</style>

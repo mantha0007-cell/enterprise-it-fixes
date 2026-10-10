@@ -4,7 +4,7 @@ An English-language library of practical enterprise IT troubleshooting guides. S
 
 Articles explain issue patterns in original wording and link to relevant vendor sources. Each guide must add a diagnostic angle of its own, such as a decision path, a useful comparison, or a risk boundary; a plain paraphrase of a vendor article is not enough. The guides are intended as helpful guidelines: the actual cause and suitable change depend on the environment. They do not claim that Enterprise IT Fixes investigated a specific customer's incident or applied a fix in that environment.
 
-This repository currently publishes eighteen guides. The sample page is a non-indexed draft and is excluded from case routes, search, browsing, and the sitemap. Cloudflare Web Analytics is enabled for the Pages project. Google Analytics is prepared but remains inactive until a GA4 Measurement ID is configured; its tag is gated behind an explicit analytics choice. No advertising code or slots are active.
+This repository currently publishes twenty guides. The sample page is a non-indexed draft and is excluded from case routes, search, browsing, and the sitemap. Cloudflare Web Analytics is enabled for the Pages project. Google Analytics is not implemented or active; the site has no Google Analytics tag or analytics choice popup. Advertising and affiliate placements are inactive.
 
 ## Published guides
 
@@ -26,6 +26,8 @@ This repository currently publishes eighteen guides. The sample page is a non-in
 16. Setting up a Windows Hello PIN on Windows 11
 17. Setting Chrome as the default browser and file handler in Windows 11
 18. Troubleshooting PDF downloads instead of previews in a browser portal
+19. Windows .NET Framework 3.5 error 0x800F0950
+20. Windows .NET Framework 3.5 source download failure 0x800F0906
 
 These topics target specific troubleshooting queries. Search demand and traffic are not guaranteed or measured here.
 
@@ -35,9 +37,11 @@ The site is published on [Cloudflare Pages](https://enterprise-it-fixes.pages.de
 
 ## Analytics and advertising
 
-Cloudflare Web Analytics is enabled in the Pages project and is injected by Cloudflare on the next deployment. Google Analytics is prepared as an optional feature. To activate it, set `PUBLIC_GA_MEASUREMENT_ID` to the GA4 web stream ID (`G-...`) in the Cloudflare Pages production build environment. The site then shows an accept/reject choice and loads the Google tag only after the visitor opts in. Without a valid ID, no consent prompt or Google request is emitted. Test the choice and withdrawal flow before activation.
+Cloudflare Web Analytics is enabled in the Pages project. Google Analytics is not implemented: there is no GA4 measurement ID, Google tag, or analytics consent popup in the site. Do not add a measurement ID alone; a future GA integration would also need a reviewed consent and withdrawal flow before it is enabled.
 
-Advertising remains off. Apply for AdSense only when the site has enough distinctive, useful content for review. Google must approve the site before ads can be served; personalized ads to EEA, UK, or Swiss visitors require a Google-certified CMP integrated with IAB TCF. Do not add ad code until account approval, the consent setup, and ad placement review are complete. If approved, use at most a small number of clearly separated placements that do not interrupt troubleshooting steps.
+Advertising remains off. An optional responsive AdSense component exists at the end of published guides, but it emits no ad markup or script unless `ADSENSE_ENABLED=true`, `ADSENSE_CMP_READY=true`, and valid `ADSENSE_PUBLISHER_ID` and `ADSENSE_GUIDE_SLOT` values are configured in the production build environment. The example configuration keeps both switches false and the account values blank. Do not activate it until the site has an approved AdSense account and a suitable consent setup; meaningful earnings are not guaranteed.
+
+Affiliate or sponsor recommendations are optional per guide through the `commercialRecommendation` frontmatter object. Add one only for a relevant provider after an actual partner relationship/link is available. Keep descriptions original and useful, do not claim testing or endorsement that did not happen, and retain the visible relationship disclosure rendered by `PartnerRecommendation.astro`. Do not add commercial links to every guide just to monetize them; update the Privacy page before activating a partner or advertising integration.
 
 ## Add or update a guide
 
