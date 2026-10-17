@@ -1,7 +1,7 @@
 ---
 title: "OneDrive says a file or folder with this name already exists"
 slug: "onedrive-file-folder-name-conflict"
-description: "Diagnose OneDrive's same-name sync warning by checking the sync trigger, local and cloud item types, account, and evidence before changing files."
+description: "Diagnose OneDrive's same-name sync warning by comparing the trigger, local and cloud item types, account, and sync state before changing files."
 datePublished: 2026-10-17
 dateModified: 2026-10-17
 product: "OneDrive for Windows"

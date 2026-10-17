@@ -1,7 +1,7 @@
 ---
 title: "Pi-hole load average warning in an LXC container"
 slug: "pihole-load-average-warning-lxc"
-description: "Interpret Pi-hole's 15-minute load warning in a Proxmox LXC container and check CPU visibility, CPU limits, I/O waits, and service health before resizing."
+description: "Investigate Pi-hole's 15-minute load warning in Proxmox LXC by checking visible CPUs, CPU limits, I/O waits, and DNS health before resizing."
 datePublished: 2026-10-17
 dateModified: 2026-10-17
 product: "Pi-hole FTL on Proxmox VE LXC"
