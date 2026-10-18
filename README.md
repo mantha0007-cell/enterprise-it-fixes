@@ -108,3 +108,20 @@ The browser-side search uses a generated JSON index. Guide pages emit TechArticl
 - src/pages/ — homepage, guides, search, browse facets, About, Privacy, and 404.
 - src/layouts/ — shared document shell, metadata, and responsive styling.
 - public/ — static assets and client-side search.
+# IndexNow
+
+This static site can notify IndexNow-participating search engines when a page is
+published, materially updated, or removed. The verification key is hosted at the
+site root in `public/`.
+
+After Cloudflare Pages has deployed a changed page, submit only that page's
+canonical URL:
+
+```sh
+pnpm indexnow:submit -- https://enterprise-it-fixes.pages.dev/cases/example-case/
+```
+
+The script checks that the public key file is live and that every submitted URL
+belongs to this site. It does not submit the whole sitemap or guarantee that a
+search engine will crawl or index a page. Google Search Console remains the
+separate route for Google.
