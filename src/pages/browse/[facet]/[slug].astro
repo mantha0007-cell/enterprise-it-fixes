@@ -4,6 +4,7 @@ import SiteLayout from '../../../layouts/SiteLayout.astro';
 import CaseCard from '../../../components/CaseCard.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import { facets, slugify } from '../../../lib/cases';
+import { categoryContent } from '../../../lib/category-content';
 const titles: Record<string,string> = { categories:'Category', products:'Product', vendors:'Vendor', tags:'Tag' };
 export async function getStaticPaths() {
 const entries = await getCollection('cases', ({data}) => data.visibility === 'published');
@@ -25,9 +26,14 @@ const entries = await getCollection('cases', ({data}) => data.visibility === 'pu
 const { name, facet, entries } = Astro.props;
 const sorted = [...entries].sort((a,b) => b.data.dateModified.valueOf() - a.data.dateModified.valueOf());
 const title = `${name} troubleshooting guides | Enterprise IT Fixes`;
+const editorial = facet === 'categories' && sorted.length >= 3 ? categoryContent[name] : undefined;
+const pageDescription = editorial?.description ?? `Enterprise IT troubleshooting guides tagged ${name}.`;
 ---
-<SiteLayout title={title} description={`Enterprise IT troubleshooting guides tagged ${name}.`} noindex structuredData={{'@context':'https://schema.org','@type':'CollectionPage',name,description:`Enterprise IT troubleshooting guides for ${name}.`,...(Astro.site?{url:new URL(Astro.url.pathname,Astro.site).toString()}:{})}}>
-  <div class="page"><Breadcrumbs items={[{label:'Browse',href:'/browse/'},{label:titles[facet],href:'/browse/'},{label:name}]} /><p class="eyebrow">{titles[facet]}</p><h1 class="page-title">{name}</h1><p class="page-lead">Troubleshooting guides associated with {name}.</p>
+<SiteLayout title={title} description={pageDescription} noindex={!editorial} structuredData={{'@context':'https://schema.org','@type':'CollectionPage',name,description:pageDescription,numberOfItems:sorted.length,...(Astro.site?{url:new URL(Astro.url.pathname,Astro.site).toString()}:{})}}>
+  <div class="page"><Breadcrumbs items={[{label:'Browse',href:'/browse/'},{label:titles[facet],href:'/browse/'},{label:name}]} /><p class="eyebrow">{titles[facet]}</p><h1 class="page-title">{name}</h1><p class="page-lead">{editorial?.introduction ?? `Troubleshooting guides associated with ${name}.`}</p>
     {sorted.length ? <div class="case-grid section">{sorted.map((entry) => <CaseCard entry={entry} />)}</div> : <p class="empty-state section">No guides are listed here yet.</p>}
   </div>
 </SiteLayout>
+<style>
+  .page-lead{line-height:1.75}
+</style>

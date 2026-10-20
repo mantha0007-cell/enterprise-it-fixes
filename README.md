@@ -92,7 +92,7 @@ pnpm build
 pnpm preview
 ```
 
-Set SITE_URL to the production origin for a production build. This controls canonical links and the sitemap.
+Set SITE_URL to the production origin when using a custom domain. If it is unset, the build uses the published Pages origin (`https://enterprise-it-fixes.pages.dev`) for canonical links and the sitemap.
 
 ## Deploy
 

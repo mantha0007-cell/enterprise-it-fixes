@@ -8,6 +8,10 @@ const groups = facets(entries);
 const sorted = [...entries].sort((a, b) => a.data.title.localeCompare(b.data.title));
 const products = groups.products.map((name) => ({ name, slug: slugify(name) }));
 const categories = groups.categories.map((name) => ({ name, slug: slugify(name) }));
+const categoryCards = categories.map((category) => ({
+  ...category,
+  count: entries.filter(({ data }) => data.category === category.name).length,
+})).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 const guideRows = sorted.map((entry, index) => ({
   entry,
   index,
@@ -24,6 +28,10 @@ const guideRows = sorted.map((entry, index) => ({
       <h1 class="page-title">Troubleshooting guides</h1>
       <p class="page-lead">Start with the error or symptom. Filter down to the product and issue area.</p>
     </header>
+
+    <nav class="category-browser" aria-label="Browse by issue area">
+      {categoryCards.map(({ name, slug, count }) => <a href={`/browse/categories/${slug}/`}><span>{name}</span><small>{count} {count === 1 ? 'guide' : 'guides'}</small><span class="category-arrow" aria-hidden="true">↗</span></a>)}
+    </nav>
 
     <section class="library-tools" aria-label="Find a guide">
       <label class="library-search"><span>Search guides</span><input type="search" placeholder="Error code, event ID, symptom…" autocomplete="off" data-guide-search /></label>
@@ -52,6 +60,12 @@ const guideRows = sorted.map((entry, index) => ({
   .library-heading .eyebrow{margin:0 0 8px}
   .library-heading .page-title{margin:0;font-size:clamp(2.2rem,4.5vw,3.45rem);letter-spacing:-.06em}
   .library-heading .page-lead{margin:9px 0 25px;font-size:1rem}
+  .category-browser{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:20px 0 22px}
+  .category-browser a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1px 8px;align-items:center;padding:10px 12px;border:1px solid #dce3e8;border-radius:9px;background:white;color:#263742;text-decoration:none}
+  .category-browser a:hover{border-color:#8fcac4;color:#07575d}
+  .category-browser a>span:first-child{font-size:.83rem;font-weight:700}
+  .category-browser small{grid-column:1;color:#64737c;font-size:.72rem}
+  .category-arrow{grid-column:2;grid-row:1/3;color:#087e83}
   .library-tools{display:grid;grid-template-columns:minmax(250px,1fr) minmax(160px,.58fr) minmax(160px,.58fr) auto;align-items:end;gap:12px;padding:16px;background:#fff;border:1px solid #dce3e8;border-radius:14px;box-shadow:0 8px 24px #14283209}
   .library-tools label{display:grid;gap:5px;min-width:0}
   .library-tools label>span{color:#61717a;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -72,6 +86,6 @@ const guideRows = sorted.map((entry, index) => ({
   .guide-arrow{color:#087e83;font-size:1.08rem;text-align:right}
   .library-empty{margin:20px 0;padding:26px;border:1px dashed #c8d4d9;border-radius:12px;color:#61717a;text-align:center}
   .library-footnote{margin:19px 0 0;color:#718089;font-size:.77rem}
-  @media(max-width:780px){.library-tools{grid-template-columns:1fr 1fr}.library-search{grid-column:1/-1}.library-count{grid-column:1/-1;margin:0;text-align:left}}
+  @media(max-width:780px){.category-browser{grid-template-columns:repeat(2,minmax(0,1fr))}.library-tools{grid-template-columns:1fr 1fr}.library-search{grid-column:1/-1}.library-count{grid-column:1/-1;margin:0;text-align:left}}
   @media(max-width:540px){.library-page{padding-top:31px}.library-tools{grid-template-columns:1fr;gap:10px}.library-search{grid-column:auto}.library-count{grid-column:auto}.guide-row-link{grid-template-columns:25px minmax(0,1fr) 18px;gap:10px;padding:15px 4px}.guide-identifier{grid-column:2;justify-self:start;margin-top:5px}.guide-arrow{grid-column:3;grid-row:1}.guide-summary{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.guide-copy h2{font-size:.94rem}}
 </style>
