@@ -1,0 +1,60 @@
+<section class="triage" aria-labelledby="triage-title">
+  <p class="eyebrow">Interactive check</p>
+  <h2 id="triage-title">Find the next Outlook check</h2>
+  <p>Choose the statement that best matches what you see. This helper does not read or store mailbox data.</p>
+
+  <label for="mailbox-state">Where are the messages visible?</label>
+  <select id="mailbox-state">
+    <option value="web-missing">They are missing in Outlook on the web too</option>
+    <option value="web-found">They appear in Outlook on the web</option>
+  </select>
+
+  <div id="folder-question" hidden>
+    <label for="folder-state">In Outlook on the web, are they in the same mailbox and folder you checked in Classic Outlook?</label>
+    <select id="folder-state">
+      <option value="folder-unknown">I have not confirmed that yet</option>
+      <option value="folder-same">Yes, same mailbox and folder</option>
+      <option value="folder-different">No, a different mailbox or folder</option>
+    </select>
+  </div>
+
+  <div id="result" class="triage-result" role="status" aria-live="polite">
+    <strong>Check the server-side location first.</strong>
+    <span>Confirm the account and mailbox, then check the folder in Outlook on the web. If the messages are absent there too, an OST rebuild will not restore them; check archive, deleted items, retention, or ask the mail administrator to trace the messages.</span>
+  </div>
+</section>
+
+<script>
+  const mailboxState = document.querySelector<HTMLSelectElement>('#mailbox-state');
+  const folderQuestion = document.querySelector<HTMLElement>('#folder-question');
+  const folderState = document.querySelector<HTMLSelectElement>('#folder-state');
+  const result = document.querySelector<HTMLElement>('#result');
+
+  const advice: Record<string, [string, string]> = {
+    'web-missing': ['Check the server-side location first.', 'Confirm the account and mailbox, then check the folder in Outlook on the web. If the messages are absent there too, an OST rebuild will not restore them; check archive, deleted items, retention, or ask the mail administrator to trace the messages.'],
+    'folder-unknown': ['Match the mailbox and folder.', 'In both clients, confirm the same account, primary or shared mailbox, and exact folder. Check search and view filters before treating the messages as missing.'],
+    'folder-different': ['You found a location mismatch.', 'Use the mailbox and folder where the messages actually appear in Outlook on the web. A local cache reset is not needed to correct a mailbox or folder selection.'],
+    'folder-same': ['Now check synchronization and cache scope.', 'In Classic Outlook, confirm it is online, run Update Folder, and review the sync status. If only older messages are absent, check the Cached Exchange Mode setting for how much mail is kept offline. For a shared mailbox, check its folder-caching setting too.'],
+  };
+
+  function updateAdvice() {
+    const state = mailboxState?.value === 'web-found' ? (folderState?.value ?? 'folder-unknown') : 'web-missing';
+    if (folderQuestion) folderQuestion.hidden = mailboxState?.value !== 'web-found';
+    const [heading, text] = advice[state];
+    if (result) result.innerHTML = `<strong>${heading}</strong><span>${text}</span>`;
+  }
+
+  mailboxState?.addEventListener('change', updateAdvice);
+  folderState?.addEventListener('change', updateAdvice);
+</script>
+
+<style>
+  .triage{margin:1.5rem 0;padding:1.25rem 1.4rem;border:1px solid #cbd9dc;border-radius:14px;background:#f5f9f9}
+  .triage .eyebrow{margin:0 0 .25rem;color:#087d79;font-size:.73rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+  .triage h2{margin:.2rem 0 .45rem;font-size:1.3rem}
+  .triage p:not(.eyebrow){margin:.25rem 0 1rem;color:#53646d}
+  .triage label{display:block;margin:.8rem 0 .35rem;font-size:.91rem;font-weight:650}
+  .triage select{width:100%;max-width:38rem;min-height:44px;padding:.6rem .7rem;border:1px solid #9bafb5;border-radius:7px;background:white;color:#24343d;font:inherit}
+  .triage-result{display:grid;gap:.35rem;margin-top:1rem;padding:.85rem 1rem;border-left:3px solid #087d79;background:white;line-height:1.55}
+  .triage-result strong{color:#173943}
+</style>
