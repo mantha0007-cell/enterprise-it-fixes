@@ -10,6 +10,9 @@ const {
 const canonical = Astro.site ? new URL(canonicalPath, Astro.site).toString() : undefined;
 const robots = noindex || import.meta.env.DEV ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
 const schema = structuredData ? JSON.stringify(structuredData).replaceAll('<', '\\u003c') : undefined;
+// Keep AdSense off navigation, search, and policy pages. These pages do not
+// contain the guide content that the publisher intends to monetize.
+const loadAdSense = Astro.url.pathname === '/' || Astro.url.pathname.startsWith('/cases/');
 ---
 <!doctype html>
 <html lang="en">
@@ -20,7 +23,7 @@ const schema = structuredData ? JSON.stringify(structuredData).replaceAll('<', '
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
     <meta name="google-adsense-account" content="ca-pub-9035891576481614" />
-    { !Astro.url.pathname.startsWith('/privacy') && <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9035891576481614" crossorigin="anonymous"></script> }
+    {loadAdSense && <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9035891576481614" crossorigin="anonymous"></script>}
     {canonical && <link rel="canonical" href={canonical} />}
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content="Enterprise IT Fixes" />

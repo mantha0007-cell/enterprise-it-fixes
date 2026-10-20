@@ -8,11 +8,19 @@ const titles: Record<string,string> = { categories:'Category', products:'Product
 export async function getStaticPaths() {
 const entries = await getCollection('cases', ({data}) => data.visibility === 'published');
   const f = facets(entries);
-  return Object.entries(f).flatMap(([facet, values]) => values.map((name) => {
-    const slug = slugify(name);
-    const selected = entries.filter(({data}) => facet === 'categories' ? slugify(data.category) === slug : facet === 'products' ? slugify(data.product) === slug : facet === 'vendors' ? slugify(data.vendor) === slug : data.tags.some((tag) => slugify(tag) === slug));
-    return { params: { facet, slug }, props: { name, facet, entries: selected } };
-  }));
+  return Object.entries(f).flatMap(([facet, values]) => {
+    // Distinct labels can normalize to the same URL slug (for example, case
+    // variants). Emit one route per slug; tag matches below include all variants.
+    const namesBySlug = new Map<string, string>();
+    for (const name of values) {
+      const slug = slugify(name);
+      if (!namesBySlug.has(slug)) namesBySlug.set(slug, name);
+    }
+    return [...namesBySlug].map(([slug, name]) => {
+      const selected = entries.filter(({data}) => facet === 'categories' ? slugify(data.category) === slug : facet === 'products' ? slugify(data.product) === slug : facet === 'vendors' ? slugify(data.vendor) === slug : data.tags.some((tag) => slugify(tag) === slug));
+      return { params: { facet, slug }, props: { name, facet, entries: selected } };
+    });
+  });
 }
 const { name, facet, entries } = Astro.props;
 const sorted = [...entries].sort((a,b) => b.data.dateModified.valueOf() - a.data.dateModified.valueOf());
