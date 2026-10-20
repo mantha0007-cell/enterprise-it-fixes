@@ -25,6 +25,7 @@ const loadAdSense = Astro.url.pathname === '/' || Astro.url.pathname.startsWith(
     <meta name="google-adsense-account" content="ca-pub-9035891576481614" />
     {loadAdSense && <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9035891576481614" crossorigin="anonymous"></script>}
     {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="alternate" type="application/rss+xml" title="Enterprise IT Fixes guide updates" href={Astro.site ? new URL('/feed.xml', Astro.site).toString() : '/feed.xml'} />
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content="Enterprise IT Fixes" />
     <meta property="og:title" content={title} />
@@ -51,7 +52,7 @@ const loadAdSense = Astro.url.pathname === '/' || Astro.url.pathname.startsWith(
       <div class="footer-inner">
         <a class="brand footer-brand" href="/"><span class="brand-mark">EF</span><span>Enterprise <b>IT Fixes</b></span></a>
         <p>Practical troubleshooting guides for enterprise IT.</p>
-        <nav aria-label="Footer navigation"><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/browse/">Browse guides</a></nav>
+        <nav aria-label="Footer navigation"><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/browse/">Browse guides</a><a href="/feed.xml">Subscribe to guide updates (RSS)</a></nav>
         <small>© {new Date().getFullYear()} Enterprise IT Fixes</small>
       </div>
     </footer>
