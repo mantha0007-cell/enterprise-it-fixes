@@ -23,6 +23,10 @@ const techArticle = { '@context': 'https://schema.org', '@type': 'TechArticle', 
     <h1 class="page-title">{meta.title}</h1>
     <p class="page-lead">{meta.description}</p>
     <p class="page-meta">Published by <a href="/about/">Enterprise IT Fixes</a> · Published {meta.datePublished.toISOString().slice(0,10)} · Updated {meta.dateModified.toISOString().slice(0,10)}</p>
+    {headings.filter((heading) => heading.depth === 2 || heading.depth === 3).length > 3 && <details class="guide-toc">
+      <summary>Jump to a section</summary>
+      <nav aria-label="On this page"><ul>{headings.filter((heading) => heading.depth === 2 || heading.depth === 3).map((heading) => <li class:list={{'toc-subsection': heading.depth === 3}}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ul></nav>
+    </details>}
     <aside class="notice"><strong>Use this guide as a starting point.</strong> Product behavior and the right next step depend on your environment. Check the linked vendor documentation before making changes.</aside>
     <div class="content-layout" style="margin-top:24px">
       <article class="article" itemprop="articleBody">
@@ -44,4 +48,12 @@ const techArticle = { '@context': 'https://schema.org', '@type': 'TechArticle', 
   </div>
 </SiteLayout>
 <style>
+  .guide-toc{margin:18px 0;padding:12px 15px;border:1px solid #dce3e8;border-radius:10px;background:#fff}
+  .guide-toc summary{color:#08777d;font-weight:700;cursor:pointer}
+  .guide-toc nav{margin-top:8px}
+  .guide-toc ul{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px 18px;margin:0;padding:0;list-style:none}
+  .guide-toc li{font-size:.86rem}
+  .guide-toc .toc-subsection{padding-left:14px}
+  .guide-toc a{text-decoration:none}
+  .guide-toc a:hover{text-decoration:underline;text-underline-offset:3px}
 </style>
