@@ -7,7 +7,7 @@ dateModified: 2026-10-17
 product: "PhotoPrism with OneDrive and rclone"
 vendor: "PhotoPrism; rclone; Microsoft"
 versions: ["PhotoPrism and rclone versions vary by deployment"]
-category: "File Synchronization"
+category: "File synchronization"
 tags: ["PhotoPrism", "OneDrive", "rclone", "file synchronization", "indexing", "containers"]
 errorCodes: []
 eventIds: []
