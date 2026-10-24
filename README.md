@@ -4,7 +4,7 @@ An English-language library of practical enterprise IT troubleshooting guides. S
 
 Articles explain issue patterns in original wording and link to relevant vendor sources. Each guide must add a diagnostic angle of its own, such as a decision path, a useful comparison, or a risk boundary; a plain paraphrase of a vendor article is not enough. The guides are intended as helpful guidelines: the actual cause and suitable change depend on the environment. They do not claim that Enterprise IT Fixes investigated a specific customer's incident or applied a fix in that environment.
 
-This repository currently publishes 34 guides. The sample page is a non-indexed draft and is excluded from case routes, search, browsing, and the sitemap. Cloudflare Web Analytics is enabled for the Pages project. Google Analytics is not implemented or active; the site has no Google Analytics tag or analytics choice popup. Advertising and affiliate placements are inactive.
+This repository currently publishes 37 guides. The sample page is a non-indexed draft and is excluded from case routes, search, browsing, and the sitemap. Cloudflare Web Analytics is enabled for the Pages project. Google Analytics is not implemented or active; the site has no Google Analytics tag or analytics choice popup. Advertising and affiliate placements are inactive.
 
 ## Published guides
 
@@ -22,26 +22,29 @@ This repository currently publishes 34 guides. The sample page is a non-indexed 
 12. Configuration Manager PXE certificate error 0x80092002
 13. Windows DNS Server Event ID 4013
 14. Outlook messages missing from Classic Outlook
-15. Choosing between chat threads, Codex subagents, and programmable agent workflows
-16. Windows Hello PIN setup on Windows 11
-17. Chrome default browser and file handler on Windows 11
-18. PDF download instead of preview in a browser portal
-19. Windows .NET Framework 3.5 error 0x800F0950
-20. Windows .NET Framework 3.5 source download failure 0x800F0906
-21. Decommissioning the final on-premises Exchange server in a hybrid organization
-22. DHCP scope exhaustion after lease-duration changes
-23. DHCP Event 20322 and DNS error 9009 during PTR registration
-24. Trace Windows DNS registrations after adapter changes
-25. RDS idle and disconnected session limits through Group Policy
-26. Robocopy error 267 for a single-file source path
-27. Windows Event 4625 logon type 8 investigation
-28. OneDrive file and folder name conflict
-29. PowerShell execution policy blocks a VPN support script
-30. Windows 11 time-zone and location troubleshooting
-31. Wi-Fi BSSID and Windows location investigation
-32. Pi-hole load average warning in a Proxmox LXC container
-33. Pi-hole upstream connection errors and delayed DNS
-34. OneDrive files missing from PhotoPrism after sync
+15. Outlook notification sounds missing in New and Classic Outlook
+16. Choosing between chat threads, Codex subagents, and programmable agent workflows
+17. Windows Hello PIN setup on Windows 11
+18. Chrome default browser and file handler on Windows 11
+19. PDF download instead of preview in a browser portal
+20. Windows .NET Framework 3.5 error 0x800F0950
+21. Windows .NET Framework 3.5 source download failure 0x800F0906
+22. Decommissioning the final on-premises Exchange server in a hybrid organization
+23. DHCP scope exhaustion after lease-duration changes
+24. DHCP Event 20322 and DNS error 9009 during PTR registration
+25. Trace Windows DNS registrations after adapter changes
+26. RDS idle and disconnected session limits through Group Policy
+27. Robocopy error 267 for a single-file source path
+28. Windows Event 4625 logon type 8 investigation
+29. OneDrive file and folder name conflict
+30. PowerShell execution policy blocks a VPN support script
+31. Windows 11 time-zone and location troubleshooting
+32. Wi-Fi BSSID and Windows location investigation
+33. Logitech CollabOS room devices lose Wi-Fi
+34. Pi-hole load average warning in a Proxmox LXC container
+35. Pi-hole upstream connection errors and delayed DNS
+36. OneDrive files missing from PhotoPrism after sync
+37. EasyMorph Server Link times out after a reboot
 
 These topics target specific troubleshooting queries. Search demand and traffic are not guaranteed or measured here.
 
